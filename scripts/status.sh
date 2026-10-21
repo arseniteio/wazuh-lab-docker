@@ -32,7 +32,7 @@ for c in buckets:
 step "OSCompliance facts in the indexer (last 24 h, by fact and agent)"
 ix 'wazuh-alerts-*/_search?size=0' -H 'Content-Type: application/json' -d '{
   "query": {"bool": {"filter": [
-    {"term": {"rule.id": "112001"}},
+    {"term": {"rule.id": "119001"}},
     {"range": {"timestamp": {"gte": "now-24h"}}}]}},
   "aggs": {"f": {"terms": {"field": "data.fact", "size": 50},
     "aggs": {"a": {"terms": {"field": "agent.name", "size": 20}}}}}}' \

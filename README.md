@@ -68,7 +68,7 @@ overrides go in `lab.conf.local` (not versioned).
 | Agent inventory interval to 60 s | `scripts/dashboard-setup.sh` | Dashboard green after restart |
 | `ens` group, runbook and OSCompliance manager rules, OSCompliance `<localfile>` | `scripts/manager-setup.sh` | Each installer's `wazuh-logtest` check passes, configuration valid |
 | First configuration save, seeding, validation | `scripts/seed.sh` | `APPLIED` per control, document valid |
-| Agent `lab-agent-01` | `agent-01` service | Agent active, v1 and OSCompliance facts (rule 112001) indexed, agent in inventory |
+| Agent `lab-agent-01` | `agent-01` service | Agent active, v1 and OSCompliance facts (rule 119001) indexed, agent in inventory |
 | OSCompliance engine, one pass every 5 minutes | `engine` service | Verdicts for `lab-agent-01` in `oscompliance-verdicts` |
 
 All steps are idempotent.

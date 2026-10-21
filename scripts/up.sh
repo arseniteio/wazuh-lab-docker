@@ -55,7 +55,7 @@ facts_ok() {
 wait_for "first agent facts in the indexer" 300 facts_ok
 osc_facts_ok() {
   ix 'wazuh-alerts-*/_count' -H 'Content-Type: application/json' \
-    -d '{"query":{"bool":{"filter":[{"term":{"agent.name":"lab-agent-01"}},{"term":{"rule.id":"112001"}}]}}}' \
+    -d '{"query":{"bool":{"filter":[{"term":{"agent.name":"lab-agent-01"}},{"term":{"rule.id":"119001"}}]}}}' \
   | grep -Eq '"count":[1-9]'
 }
 wait_for "first oscompliance facts in the indexer" 300 osc_facts_ok
