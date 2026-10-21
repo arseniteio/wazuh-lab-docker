@@ -122,7 +122,7 @@ services:
       - RUNBOOKS=${RUNBOOKS}
     volumes:
       - ${RUNBOOKS_DIR}:/runbooks:ro
-      # oscompliance-agent built by scripts/build-agent.sh.
+      # oscompliance-agent built by scripts/build-core.sh.
       - ./build/oscompliance:/opt/oscompliance:ro
       # Agent identity (client.keys) and configuration: survives recreating
       # the container, as on a real machine. Without it, a recreated agent
@@ -133,6 +133,22 @@ services:
     # The agent only starts once the manager has the ens group and the rules:
     # scripts/up.sh starts it in its own step, not plain `docker compose up`.
     profiles: [agents]
+
+  # (5) OSCompliance engine: reads the facts from the indexer, judges them and
+  # writes verdicts to the oscompliance-verdicts index. Binary built by
+  # scripts/build-core.sh; one pass every 5 minutes.
+  engine:
+    image: alpine:3.20
+    restart: unless-stopped
+    entrypoint: ["/opt/oscompliance/oscompliance-engine"]
+    command: ["-indexer", "https://wazuh.indexer:9200", "-ca", "/certs/root-ca.pem", "-interval", "5m"]
+    environment:
+      - OSC_INDEXER_PASSWORD=${INDEXER_PASSWORD}
+    volumes:
+      - ./build/oscompliance:/opt/oscompliance:ro
+      - ./certs:/certs:ro
+    depends_on:
+      - wazuh.indexer
 
 volumes:
   wazuh_api_configuration:

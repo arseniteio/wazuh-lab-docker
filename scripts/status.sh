@@ -46,3 +46,20 @@ for f in buckets:
     for a in f["a"]["buckets"]:
         print("  {:<28} {:<16} {} facts".format(f["key"], a["key"], a["doc_count"]))
 ' 2>/dev/null || warn "indexer not available"
+
+step "OSCompliance verdicts (newest per agent and evidence)"
+ix 'oscompliance-verdicts/_search?size=0' -H 'Content-Type: application/json' -d '{
+  "aggs": {"k": {"multi_terms": {"terms": [{"field": "agent.name"}, {"field": "control"}, {"field": "evidence"}], "size": 200},
+    "aggs": {"last": {"top_hits": {"size": 1, "sort": [{"@timestamp": "desc"}],
+      "_source": ["status", "cause", "reason", "@timestamp"]}}}}}}' \
+| python3 -c '
+import json, sys
+r = json.load(sys.stdin)
+buckets = r.get("aggregations", {}).get("k", {}).get("buckets", [])
+if not buckets:
+    print("  none yet")
+for b in buckets:
+    v = b["last"]["hits"]["hits"][0]["_source"]
+    agent, control, evidence = b["key"]
+    print("  {:<16} {:<10} {:<6} {:<14} {} {}".format(agent, control, evidence, v["status"], v.get("cause", ""), v.get("reason", "")))
+' 2>/dev/null || warn "no verdicts index yet"

@@ -3,7 +3,8 @@
 Local end-to-end test environment for ENSFácil: Wazuh 4.14.7 (indexer, manager,
 dashboard) with the ENSFácil plugin installed, runbook rules on the manager, and
 an Ubuntu agent that runs the runbooks and ships their facts. The same agent also
-runs `oscompliance-agent`, built from `oscompliance-core`, side by side with v1.
+runs `oscompliance-agent`, built from `oscompliance-core`, side by side with v1,
+and an `engine` container judges its facts.
 
 ## Requirements
 
@@ -33,7 +34,9 @@ The certificate is signed by the lab CA.
 
 Plugin change: `REBUILD=1 make up`.
 Runbook change: `make manager`, then recreate `agent-01`.
-Agent change: `bash scripts/build-agent.sh`; the next hourly pass (minute 17)
+Engine change: `bash scripts/build-core.sh`, then
+`docker restart ensfacil-lab-engine-1`.
+Agent change: `bash scripts/build-core.sh`; the next hourly pass (minute 17)
 runs it, or run it now:
 `docker exec ensfacil-lab-agent-01-1 /opt/oscompliance/oscompliance-agent -output /var/log/oscompliance/facts.ndjson`.
 Rule change in `catalog/wazuh/`: `make manager`.
@@ -60,12 +63,13 @@ overrides go in `lab.conf.local` (not versioned).
 |---|---|---|
 | Certificates (lab CA, in `certs/`) | `scripts/certs.sh` | All node and admin certificates present |
 | Plugin zip | `scripts/build-plugin.sh` | Zip in `build/` |
-| `oscompliance-agent`, always rebuilt | `scripts/build-agent.sh` | Linux binary in `build/oscompliance/` |
+| `oscompliance-agent` and `oscompliance-engine`, always rebuilt | `scripts/build-core.sh` | Linux binaries in `build/oscompliance/` |
 | Indexer, manager, dashboard | `docker-compose.yml` | Indexer green/yellow, analysisd running, dashboard green |
 | Agent inventory interval to 60 s | `scripts/dashboard-setup.sh` | Dashboard green after restart |
 | `ens` group, runbook and OSCompliance manager rules, OSCompliance `<localfile>` | `scripts/manager-setup.sh` | Each installer's `wazuh-logtest` check passes, configuration valid |
 | First configuration save, seeding, validation | `scripts/seed.sh` | `APPLIED` per control, document valid |
 | Agent `lab-agent-01` | `agent-01` service | Agent active, v1 and OSCompliance facts (rule 112001) indexed, agent in inventory |
+| OSCompliance engine, one pass every 5 minutes | `engine` service | Verdicts for `lab-agent-01` in `oscompliance-verdicts` |
 
 All steps are idempotent.
 
