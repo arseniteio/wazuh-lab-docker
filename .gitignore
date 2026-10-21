@@ -1,0 +1,8 @@
+# Lab-generated certificates: never versioned.
+certs/
+# Built zips and working files.
+build/
+images/dashboard/ensfacil-2.19.5.zip
+# Your machine's own overrides.
+lab.conf.local
+.DS_Store
