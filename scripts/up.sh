@@ -6,11 +6,12 @@
 #
 # Steps, each one checked before moving on:
 #   1. lab certificates               scripts/certs.sh
-#   2. ENSFácil zip                   build/ (built if missing)
+#   2. ENSFácil zip, oscompliance-agent  build/ (zip built if missing)
 #   3. indexer, manager, dashboard    docker compose up
 #   4. dashboard tuning + manager     scripts/dashboard-setup.sh, manager-setup.sh
 #   5. plugin configuration           scripts/seed.sh
 #   6. agent running the runbooks     agent-01 service
+#      and oscompliance-agent
 ###############################################################################
 set -euo pipefail
 . "$(dirname "$0")/lib.sh"
@@ -25,6 +26,9 @@ else
   ok "using $ZIP (REBUILD=1 to rebuild)"
 fi
 cp "$ZIP" "$LAB_DIR/images/dashboard/ensfacil-2.19.5.zip"
+
+# Always rebuilt: it takes seconds and the lab must run the current agent code.
+bash "$LAB_DIR/scripts/build-agent.sh"
 
 step "Building images and starting Wazuh $WAZUH_VERSION"
 "${COMPOSE[@]}" build --quiet wazuh.manager wazuh.dashboard agent-01
@@ -48,6 +52,12 @@ facts_ok() {
   | grep -Eq '"count":[1-9]'
 }
 wait_for "first agent facts in the indexer" 300 facts_ok
+osc_facts_ok() {
+  ix 'wazuh-alerts-*/_count' -H 'Content-Type: application/json' \
+    -d '{"query":{"bool":{"filter":[{"term":{"agent.name":"lab-agent-01"}},{"term":{"rule.id":"112001"}}]}}}' \
+  | grep -Eq '"count":[1-9]'
+}
+wait_for "first oscompliance facts in the indexer" 300 osc_facts_ok
 inventory_ok() { ix 'wazuh-monitoring-*/_count?q=name:lab-agent-01' | grep -Eq '"count":[1-9]'; }
 wait_for "agent in the inventory the panel reads" 300 inventory_ok
 

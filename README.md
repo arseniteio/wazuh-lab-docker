@@ -2,14 +2,16 @@
 
 Local end-to-end test environment for ENSFácil: Wazuh 4.14.7 (indexer, manager,
 dashboard) with the ENSFácil plugin installed, runbook rules on the manager, and
-an Ubuntu agent that runs the runbooks and ships their facts.
+an Ubuntu agent that runs the runbooks and ships their facts. The same agent also
+runs `oscompliance-agent`, built from `oscompliance-core`, side by side with v1.
 
 ## Requirements
 
 - Docker with Compose v2. Tested on OrbStack, Apple Silicon, 12 GB allocated.
 - Image `ensfacil-osd-builder:2.19.5`, built from `ci/osd-builder.Dockerfile` in
   the plugin repository.
-- Plugin and runbook sources at the paths set in `lab.conf`.
+- Plugin, runbook and `oscompliance-core` sources at the paths set in `lab.conf`.
+- Go, to build `oscompliance-agent`.
 
 ## Usage
 
@@ -31,6 +33,10 @@ The certificate is signed by the lab CA.
 
 Plugin change: `REBUILD=1 make up`.
 Runbook change: `make manager`, then recreate `agent-01`.
+Agent change: `bash scripts/build-agent.sh`; the next hourly pass (minute 17)
+runs it, or run it now:
+`docker exec ensfacil-lab-agent-01-1 /opt/oscompliance/oscompliance-agent -output /var/log/oscompliance/facts.ndjson`.
+Rule change in `catalog/wazuh/`: `make manager`.
 
 ## Configuration
 
@@ -44,6 +50,7 @@ overrides go in `lab.conf.local` (not versioned).
 | `PLUGIN_SRC` | plugin repository path | Plugin source, mounted read-only |
 | `RUNBOOKS_DIR` | runbooks parent path | Runbook sources, mounted read-only |
 | `RUNBOOKS` | `op.acc.1-identification` | Runbooks installed on manager and agent |
+| `CORE_SRC` | `oscompliance-core` path | Agent source and manager rules (`catalog/wazuh/`) |
 | `CONTROLS` | 23 active controls | Controls seeded into the configuration |
 | `DASHBOARD_PORT` | `8443` | Dashboard port on `127.0.0.1` |
 
@@ -53,11 +60,12 @@ overrides go in `lab.conf.local` (not versioned).
 |---|---|---|
 | Certificates (lab CA, in `certs/`) | `scripts/certs.sh` | All node and admin certificates present |
 | Plugin zip | `scripts/build-plugin.sh` | Zip in `build/` |
+| `oscompliance-agent`, always rebuilt | `scripts/build-agent.sh` | Linux binary in `build/oscompliance/` |
 | Indexer, manager, dashboard | `docker-compose.yml` | Indexer green/yellow, analysisd running, dashboard green |
 | Agent inventory interval to 60 s | `scripts/dashboard-setup.sh` | Dashboard green after restart |
-| `ens` group and runbook manager rules | `scripts/manager-setup.sh` | Each installer's `wazuh-logtest` check passes |
+| `ens` group, runbook and OSCompliance manager rules, OSCompliance `<localfile>` | `scripts/manager-setup.sh` | Each installer's `wazuh-logtest` check passes, configuration valid |
 | First configuration save, seeding, validation | `scripts/seed.sh` | `APPLIED` per control, document valid |
-| Agent `lab-agent-01` | `agent-01` service | Agent active, facts indexed, agent in inventory |
+| Agent `lab-agent-01` | `agent-01` service | Agent active, v1 and OSCompliance facts (rule 112001) indexed, agent in inventory |
 
 All steps are idempotent.
 
@@ -80,6 +88,8 @@ lab.conf             lab settings
 - The plugin is installed from its zip and runbooks with their own installers,
   as in a customer deployment.
 - Sources are mounted read-only.
+- `oscompliance-agent` only runs: its `<localfile>` reaches the agent through
+  the `ens` group `agent.conf`, and its rules live on the manager.
 - Each step is a standalone script, reusable as a CI job.
 
 ## Known issues

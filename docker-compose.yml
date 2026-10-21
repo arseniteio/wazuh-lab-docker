@@ -122,6 +122,8 @@ services:
       - RUNBOOKS=${RUNBOOKS}
     volumes:
       - ${RUNBOOKS_DIR}:/runbooks:ro
+      # oscompliance-agent built by scripts/build-agent.sh.
+      - ./build/oscompliance:/opt/oscompliance:ro
       # Agent identity (client.keys) and configuration: survives recreating
       # the container, as on a real machine. Without it, a recreated agent
       # clashes with its own name on the manager.
