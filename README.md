@@ -1,4 +1,4 @@
-# ensfacil-lab
+# wazuh-lab-docker
 
 Local end-to-end test environment for ENSFácil: Wazuh 4.14.7 (indexer, manager,
 dashboard) with the ENSFácil plugin installed, runbook rules on the manager, and
