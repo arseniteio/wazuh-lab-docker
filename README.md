@@ -92,6 +92,9 @@ lab.conf             lab settings
 - The plugin is installed from its zip and runbooks with their own installers,
   as in a customer deployment.
 - Sources are mounted read-only.
+- The agent container runs rsyslog and sshd and makes one key-based login as
+  `jperez` at startup, so `auth.log` carries a real login (op.acc.1 EV-03).
+  `manager-setup.sh` adds `/var/log/auth.log` to the `ens` group for it.
 - `oscompliance-agent` only runs: its `<localfile>` reaches the agent through
   the `ens` group `agent.conf`, and its rules live on the manager.
 - Each step is a standalone script, reusable as a CI job.

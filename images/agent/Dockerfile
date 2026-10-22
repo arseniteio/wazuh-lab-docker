@@ -18,6 +18,15 @@ RUN apt-get update \
       apt-get install -y wazuh-agent=${WAZUH_VERSION}-1 \
  && rm -rf /var/lib/apt/lists/*
 
+# sshd and rsyslog for op.acc.1 EV-03 (an auth.log with real logins). In
+# their own layer AFTER wazuh-agent: their system users must not shift the
+# wazuh UID/GID, which the agent01_ossec_etc volume keeps from earlier builds.
+# No kernel log in a container: rsyslog would only complain about imklog.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends openssh-server openssh-client rsyslog \
+ && rm -rf /var/lib/apt/lists/* \
+ && sed -i 's/^module(load="imklog"/#&/' /etc/rsyslog.conf
+
 # Person accounts so op.acc.1 has something to observe.
 RUN useradd -m -s /bin/bash -u 1001 jperez \
  && useradd -m -s /bin/bash -u 1002 mgarcia

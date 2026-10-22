@@ -2,8 +2,10 @@
 # Startup of the audited machine:
 #   1. installs each runbook in $RUNBOOKS with its own install.sh (idempotent);
 #   2. prepares oscompliance-agent when it is mounted at /opt/oscompliance;
-#   3. starts wazuh-agent, which enrolls with the manager;
-#   4. keeps cron in the foreground: it runs the collectors.
+#   3. starts rsyslog and sshd, so there is an auth.log with real logins;
+#   4. starts wazuh-agent, which enrolls with the manager;
+#   5. makes one sshd login, then keeps cron in the foreground: it runs the
+#      collectors.
 set -eu
 
 for r in ${RUNBOOKS:-}; do
@@ -32,6 +34,16 @@ if [ -x "$OSC_AGENT" ]; then
     > /etc/cron.d/oscompliance
 fi
 
+# Authentication log for op.acc.1 EV-03: rsyslog writes /var/log/auth.log,
+# read by wazuh-agent through the ens group (scripts/manager-setup.sh).
+# rsyslog drops to the syslog user: the file needs Ubuntu's own ownership.
+[ -e /var/log/auth.log ] || install -o syslog -g adm -m 640 /dev/null /var/log/auth.log
+chown syslog:adm /var/log/auth.log
+rsyslogd
+mkdir -p /run/sshd
+ssh-keygen -A >/dev/null
+/usr/sbin/sshd
+
 /var/ossec/bin/wazuh-control start
 
 # Each runbook's <localfile> arrives with the ens group configuration, which
@@ -43,7 +55,8 @@ following() {
 }
 for i in $(seq 1 90); do
   { [ -z "${RUNBOOKS:-}" ] || following /var/log/ensfacil/; } \
-    && { [ ! -x "$OSC_AGENT" ] || following "$OSC_FACTS"; } && break
+    && { [ ! -x "$OSC_AGENT" ] || following "$OSC_FACTS"; } \
+    && following /var/log/auth.log && break
   sleep 2
 done
 sleep 5
@@ -52,6 +65,19 @@ sleep 5
 for c in /usr/local/bin/ens_op*_collect.sh; do
   [ -x "$c" ] && { echo ">>> first run: $c"; "$c" || echo "warning: $c exited with an error"; }
 done
+
+# One key-based sshd login as jperez, a named account: Wazuh turns it into a
+# rule 5715 alert, which is what EV-03 reads.
+if [ ! -f /root/.ssh/lab_login ]; then
+  mkdir -p /root/.ssh /home/jperez/.ssh
+  ssh-keygen -q -t ed25519 -N "" -f /root/.ssh/lab_login
+  cp /root/.ssh/lab_login.pub /home/jperez/.ssh/authorized_keys
+  chown -R jperez:jperez /home/jperez/.ssh
+  chmod 700 /home/jperez/.ssh
+  chmod 600 /home/jperez/.ssh/authorized_keys
+fi
+ssh -i /root/.ssh/lab_login -o BatchMode=yes -o StrictHostKeyChecking=no jperez@localhost true \
+  || echo "warning: lab sshd login failed"
 
 if [ -x "$OSC_AGENT" ]; then
   echo ">>> first run: $OSC_AGENT"

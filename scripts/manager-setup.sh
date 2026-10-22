@@ -52,6 +52,28 @@ else
 fi
 
 AGENT_CONF=/var/ossec/etc/shared/ens/agent.conf
+
+# Lab machine only: its auth.log (rsyslog) carries the sshd logins EV-03 reads.
+# A real machine keeps whatever authentication source Wazuh already reads.
+if docker exec "$MGR" grep -q "<location>/var/log/auth.log</location>" "$AGENT_CONF"; then
+  ok "localfile /var/log/auth.log already in the ens group"
+else
+  tmp="$(mktemp)"
+  docker exec "$MGR" cat "$AGENT_CONF" \
+  | python3 -c '
+import sys
+conf = sys.stdin.read()
+i = conf.rindex("</agent_config>")
+sys.stdout.write(conf[:i] + "\n<localfile>\n  <log_format>syslog</log_format>\n  <location>/var/log/auth.log</location>\n</localfile>\n" + conf[i:])
+' > "$tmp"
+  docker cp -q "$tmp" "$MGR:$AGENT_CONF"
+  rm -f "$tmp"
+  docker exec "$MGR" chown wazuh:wazuh "$AGENT_CONF"
+  docker exec "$MGR" chmod 660 "$AGENT_CONF"
+  osc_changed=1
+  ok "localfile /var/log/auth.log added to the ens group"
+fi
+
 osc_location="$(sed -n 's:.*<location>\(.*\)</location>.*:\1:p' "$OSC_WAZUH/agent.conf.fragment.xml")"
 if docker exec "$MGR" grep -q "<location>$osc_location</location>" "$AGENT_CONF"; then
   ok "localfile $osc_location already in the ens group"
