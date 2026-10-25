@@ -120,12 +120,13 @@ XML
   ok "lab portal log declared for lab-agent-01"
 fi
 
-# Paths that come from parameters (op.acc.2 P-08 rights, P-06 audited
-# resources) travel as a shared file of the group: Wazuh copies it to every
+# Paths that come from parameters (op.acc.2 P-08 rights and P-06 audited
+# resources, op.acc.3 P-03 binaries and security paths) travel as a shared
+# file of the group: Wazuh copies it to every
 # agent of the group and oscompliance-agent reads it. Lab values: what the
 # lab machine has.
 OSC_SHARED=/var/ossec/etc/shared/ens/oscompliance.json
-osc_paths='{"acl_paths":["/etc/ssh","/etc/sudoers.d"],"audit_watches":["/etc/ssh"]}'
+osc_paths='{"acl_paths":["/etc/ssh","/etc/sudoers.d"],"audit_watches":["/etc/ssh","/var/ossec/etc","/etc/audit","/var/log/audit"],"exec_watches":["/usr/bin/git","/usr/bin/systemctl","/usr/bin/crontab","/usr/sbin/visudo","/usr/sbin/usermod","/usr/sbin/useradd","/usr/bin/nano","/usr/bin/vim","/usr/bin/tee","/usr/bin/apt","/usr/bin/dpkg","/usr/bin/apt-get","/usr/sbin/ausearch","/usr/sbin/auditctl"]}'
 if [ "$(docker exec "$MGR" cat "$OSC_SHARED" 2>/dev/null)" = "$osc_paths" ]; then
   ok "shared oscompliance.json already up to date"
 else
