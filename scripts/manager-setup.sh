@@ -31,8 +31,12 @@ for r in $RUNBOOKS; do
   # Only what gets deployed: no .git, no tests.
   tar -C "$RUNBOOKS_DIR/$r" --exclude .git --exclude tests --exclude .superpowers -cf - . \
     | docker exec -i "$MGR" tar -C "/opt/ensfacil-runbooks/$r" -xf -
+  # The v1 installers refuse a group configuration with more than one
+  # <agent_config> block, which the lab portal adds (op.acc.5). Their
+  # localfile is already there from the first install: warn and go on.
   docker exec -e ENSFACIL_SYSTEMCTL=/var/ossec/bin/wazuh-control "$MGR" \
-    bash "/opt/ensfacil-runbooks/$r/install-manager.sh"
+    bash "/opt/ensfacil-runbooks/$r/install-manager.sh" \
+    || warn "$r: install-manager.sh did not finish; check its localfile is in the ens group"
 done
 
 step "OSCompliance rules and localfile on the manager"
@@ -114,6 +118,19 @@ else
 XML
   osc_changed=1
   ok "lab portal log declared for lab-agent-01"
+fi
+
+# Paths that come from parameters (op.acc.2 P-08 rights, P-06 audited
+# resources) travel as a shared file of the group: Wazuh copies it to every
+# agent of the group and oscompliance-agent reads it. Lab values: what the
+# lab machine has.
+OSC_SHARED=/var/ossec/etc/shared/ens/oscompliance.json
+osc_paths='{"acl_paths":["/etc/ssh","/etc/sudoers.d"],"audit_watches":["/etc/ssh"]}'
+if [ "$(docker exec "$MGR" cat "$OSC_SHARED" 2>/dev/null)" = "$osc_paths" ]; then
+  ok "shared oscompliance.json already up to date"
+else
+  printf '%s' "$osc_paths" | docker exec -i "$MGR" sh -c "cat > $OSC_SHARED && chown wazuh:wazuh $OSC_SHARED && chmod 660 $OSC_SHARED"
+  ok "shared oscompliance.json written"
 fi
 
 docker exec "$MGR" /var/ossec/bin/wazuh-analysisd -t >/dev/null || die "manager configuration is not valid"
