@@ -7,8 +7,8 @@
 #      install-manager.sh. The image has no systemd: the restart goes through
 #      wazuh-control via ENSFACIL_SYSTEMCTL, without touching the scripts.
 #   3. Installs the OSCompliance rules from $CORE_SRC/catalog/wazuh and adds
-#      its <localfile> to the ens group agent.conf. The manager restarts only
-#      when one of them changed.
+#      its <localfile> to the ens group agent.conf, plus the lab portal log
+#      for lab-agent-01. The manager restarts only when one of them changed.
 #
 # Idempotent: the installers do not restart when nothing changed.
 ###############################################################################
@@ -63,7 +63,7 @@ else
   | python3 -c '
 import sys
 conf = sys.stdin.read()
-i = conf.rindex("</agent_config>")
+i = conf.index("</agent_config>", conf.index("<agent_config>"))
 sys.stdout.write(conf[:i] + "\n<localfile>\n  <log_format>syslog</log_format>\n  <location>/var/log/auth.log</location>\n</localfile>\n" + conf[i:])
 ' > "$tmp"
   docker cp -q "$tmp" "$MGR:$AGENT_CONF"
@@ -85,7 +85,7 @@ else
 import sys
 conf, frag = sys.stdin.read(), open(sys.argv[1]).read()
 frag = "".join(l for l in frag.splitlines(True) if not l.lstrip().startswith("<!--"))
-i = conf.rindex("</agent_config>")
+i = conf.index("</agent_config>", conf.index("<agent_config>"))
 sys.stdout.write(conf[:i] + "\n" + frag + conf[i:])
 ' "$OSC_WAZUH/agent.conf.fragment.xml" > "$tmp"
   docker cp -q "$tmp" "$MGR:$AGENT_CONF"
@@ -94,6 +94,26 @@ sys.stdout.write(conf[:i] + "\n" + frag + conf[i:])
   docker exec "$MGR" chmod 660 "$AGENT_CONF"
   osc_changed=1
   ok "localfile $osc_location added to the ens group"
+fi
+
+# Lab machine only: the log of a simulated external-user portal (op.acc.5),
+# declared for lab-agent-01 alone, as P-02 declares a service per machine.
+# The label names the service on every event (rule 119003).
+if docker exec "$MGR" grep -q "<label key=\"oscompliance_service\">sede</label>" "$AGENT_CONF"; then
+  ok "lab portal log already declared for lab-agent-01"
+else
+  docker exec -i "$MGR" sh -c "cat >> $AGENT_CONF" <<'XML'
+
+<agent_config name="lab-agent-01">
+  <localfile>
+    <log_format>json</log_format>
+    <location>/var/log/lab-portal/auth.json</location>
+    <label key="oscompliance_service">sede</label>
+  </localfile>
+</agent_config>
+XML
+  osc_changed=1
+  ok "lab portal log declared for lab-agent-01"
 fi
 
 docker exec "$MGR" /var/ossec/bin/wazuh-analysisd -t >/dev/null || die "manager configuration is not valid"

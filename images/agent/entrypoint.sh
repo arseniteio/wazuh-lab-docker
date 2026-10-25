@@ -29,10 +29,32 @@ if [ -x "$OSC_AGENT" ]; then
   install -d -m 750 "$(dirname "$OSC_FACTS")"
   [ -e "$OSC_FACTS" ] || install -m 640 /dev/null "$OSC_FACTS"
   printf '%s\n' \
-    '# oscompliance-agent: one collection pass per hour.' \
+    '# oscompliance-agent: one collection pass per hour, the filesystem sweep daily.' \
     "17 * * * * root $OSC_AGENT -output $OSC_FACTS >/dev/null 2>&1" \
+    "23 3 * * * root $OSC_AGENT -collect sweep -output $OSC_FACTS >/dev/null 2>&1" \
     > /etc/cron.d/oscompliance
 fi
+
+# A simulated external-user portal for op.acc.5: it writes its authentication
+# log in the op.acc.5 contract every hour; the manager declares the file for
+# this machine with the oscompliance_service label (scripts/manager-setup.sh).
+PORTAL_LOG=/var/log/lab-portal/auth.json
+install -d -m 750 "$(dirname "$PORTAL_LOG")"
+[ -e "$PORTAL_LOG" ] || install -m 640 /dev/null "$PORTAL_LOG"
+cat > /usr/local/bin/lab-portal <<'SH'
+#!/bin/sh
+# One hour of a citizen portal: its declared policy, a login with password
+# and OTP, and a rejection with a message that reveals nothing.
+log=/var/log/lab-portal/auth.json
+now=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+{
+  echo "{\"ts\":\"$now\",\"tipo\":\"politica\",\"bloqueo\":\"activado\",\"max_intentos\":5,\"reactivacion\":\"intervencion\",\"longitud_minima\":12,\"complejidad\":\"activada\"}"
+  echo "{\"ts\":\"$now\",\"tipo\":\"autenticacion\",\"usuario\":\"ciudadano1\",\"origen\":\"203.0.113.7\",\"resultado\":\"exito\",\"factores\":[\"password\",\"otp\"]}"
+  echo "{\"ts\":\"$now\",\"tipo\":\"autenticacion\",\"usuario\":\"ciudadano2\",\"origen\":\"203.0.113.8\",\"resultado\":\"fallo\",\"mensaje\":\"Usuario o contraseña incorrectos\"}"
+} >> "$log"
+SH
+chmod 755 /usr/local/bin/lab-portal
+echo "7 * * * * root /usr/local/bin/lab-portal" > /etc/cron.d/lab-portal
 
 # Authentication log for op.acc.1 EV-03: rsyslog writes /var/log/auth.log,
 # read by wazuh-agent through the ens group (scripts/manager-setup.sh).
@@ -56,7 +78,7 @@ following() {
 for i in $(seq 1 90); do
   { [ -z "${RUNBOOKS:-}" ] || following /var/log/ensfacil/; } \
     && { [ ! -x "$OSC_AGENT" ] || following "$OSC_FACTS"; } \
-    && following /var/log/auth.log && break
+    && following /var/log/auth.log && following "$PORTAL_LOG" && break
   sleep 2
 done
 sleep 5
@@ -78,6 +100,8 @@ if [ ! -f /root/.ssh/lab_login ]; then
 fi
 ssh -i /root/.ssh/lab_login -o BatchMode=yes -o StrictHostKeyChecking=no jperez@localhost true \
   || echo "warning: lab sshd login failed"
+
+/usr/local/bin/lab-portal
 
 if [ -x "$OSC_AGENT" ]; then
   echo ">>> first run: $OSC_AGENT"
