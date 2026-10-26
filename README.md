@@ -3,7 +3,7 @@
 Local end-to-end test environment for ENSFácil: Wazuh 4.14.7 (indexer, manager,
 dashboard) with the ENSFácil plugin installed, runbook rules on the manager, and
 an Ubuntu agent that runs the runbooks and ships their facts. The same agent also
-runs `oscompliance-agent`, built from `oscompliance-core`, side by side with v1,
+runs `oscompliance-agent`, built from `oscompliance-ens`, side by side with v1,
 and an `engine` container judges its facts.
 
 ## Requirements
@@ -11,7 +11,7 @@ and an `engine` container judges its facts.
 - Docker with Compose v2. Tested on OrbStack, Apple Silicon, 12 GB allocated.
 - Image `ensfacil-osd-builder:2.19.5`, built from `ci/osd-builder.Dockerfile` in
   the plugin repository.
-- Plugin, runbook and `oscompliance-core` sources at the paths set in `lab.conf`.
+- Plugin, runbook and `oscompliance-ens` sources at the paths set in `lab.conf`.
 - Go, to build `oscompliance-agent`.
 
 ## Usage
@@ -53,7 +53,7 @@ overrides go in `lab.conf.local` (not versioned).
 | `PLUGIN_SRC` | plugin repository path | Plugin source, mounted read-only |
 | `RUNBOOKS_DIR` | runbooks parent path | Runbook sources, mounted read-only |
 | `RUNBOOKS` | `op.acc.1-identification` | Runbooks installed on manager and agent |
-| `CORE_SRC` | `oscompliance-core` path | Agent source and manager rules (`catalog/wazuh/`) |
+| `CORE_SRC` | `oscompliance-ens` path | Agent source and manager rules (`catalog/wazuh/`) |
 | `CONTROLS` | 23 active controls | Controls seeded into the configuration |
 | `DASHBOARD_PORT` | `8443` | Dashboard port on `127.0.0.1` |
 
