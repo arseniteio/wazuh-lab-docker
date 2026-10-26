@@ -38,7 +38,7 @@ Engine change: `bash scripts/build-core.sh`, then
 `docker restart ensfacil-lab-engine-1`.
 Agent change: `bash scripts/build-core.sh`; the next hourly pass (minute 17)
 runs it, or run it now:
-`docker exec ensfacil-lab-agent-01-1 /opt/oscompliance/oscompliance-agent -output /var/log/oscompliance/facts.ndjson`.
+`docker exec ensfacil-lab-agent-01-1 /opt/oscompliance/oscompliance-agent`.
 Rule change in `catalog/wazuh/`: `make manager`.
 
 ## Configuration

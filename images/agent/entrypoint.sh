@@ -30,8 +30,8 @@ if [ -x "$OSC_AGENT" ]; then
   [ -e "$OSC_FACTS" ] || install -m 640 /dev/null "$OSC_FACTS"
   printf '%s\n' \
     '# oscompliance-agent: one collection pass per hour, the filesystem sweep daily.' \
-    "17 * * * * root $OSC_AGENT -output $OSC_FACTS >/dev/null 2>&1" \
-    "23 3 * * * root $OSC_AGENT -collect sweep -output $OSC_FACTS >/dev/null 2>&1" \
+    "17 * * * * root $OSC_AGENT >/dev/null 2>&1" \
+    "23 3 * * * root $OSC_AGENT -collect sweep >/dev/null 2>&1" \
     > /etc/cron.d/oscompliance
 fi
 
