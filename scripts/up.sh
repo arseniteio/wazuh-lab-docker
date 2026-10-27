@@ -10,7 +10,7 @@
 #   3. indexer, manager, dashboard    docker compose up
 #   4. dashboard tuning + manager     scripts/dashboard-setup.sh, manager-setup.sh
 #   5. plugin configuration           scripts/seed.sh
-#   6. agent running the runbooks     agent-01 service
+#   6. agent running oscompliance     agent-01 service
 #      and oscompliance-agent
 #   7. oscompliance-engine            engine service
 ###############################################################################
@@ -47,12 +47,6 @@ bash "$LAB_DIR/scripts/seed.sh"
 step "Starting the agent"
 "${COMPOSE[@]}" up -d agent-01
 wait_for "agent active on the manager" 300 docker exec "$MGR" sh -c '/var/ossec/bin/agent_control -l | grep "lab-agent-01" | grep -q Active'
-facts_ok() {
-  ix 'wazuh-alerts-*/_count' -H 'Content-Type: application/json' \
-    -d '{"query":{"bool":{"filter":[{"term":{"agent.name":"lab-agent-01"}},{"exists":{"field":"data.ensfacil"}}]}}}' \
-  | grep -Eq '"count":[1-9]'
-}
-wait_for "first agent facts in the indexer" 300 facts_ok
 osc_facts_ok() {
   ix 'wazuh-alerts-*/_count' -H 'Content-Type: application/json' \
     -d '{"query":{"bool":{"filter":[{"term":{"agent.name":"lab-agent-01"}},{"term":{"rule.id":"119001"}}]}}}' \

@@ -1,16 +1,13 @@
 #!/usr/bin/env bash
 ###############################################################################
-# manager-setup.sh · installs the manager side of the runbooks (plugin guide 06 §13.5).
+# manager-setup.sh · installs the manager side of OSCompliance.
 #
 #   1. Creates the ens group the agent enrolls into.
-#   2. Copies each runbook in $RUNBOOKS into the container and runs its
-#      install-manager.sh. The image has no systemd: the restart goes through
-#      wazuh-control via ENSFACIL_SYSTEMCTL, without touching the scripts.
-#   3. Installs the OSCompliance rules from $CORE_SRC/catalog/wazuh and adds
+#   2. Installs the OSCompliance rules from $CORE_SRC/catalog/wazuh and adds
 #      its <localfile> to the ens group agent.conf, plus the lab portal log
 #      for lab-agent-01. The manager restarts only when one of them changed.
 #
-# Idempotent: the installers do not restart when nothing changed.
+# Idempotent: nothing restarts when nothing changed.
 ###############################################################################
 set -euo pipefail
 . "$(dirname "$0")/lib.sh"
@@ -23,21 +20,6 @@ else
   ok "ens group created"
 fi
 
-for r in $RUNBOOKS; do
-  step "Runbook $r on the manager"
-  [ -f "$RUNBOOKS_DIR/$r/install-manager.sh" ] || { warn "$r has no install-manager.sh"; continue; }
-  docker exec "$MGR" rm -rf "/opt/ensfacil-runbooks/$r"
-  docker exec "$MGR" mkdir -p "/opt/ensfacil-runbooks/$r"
-  # Only what gets deployed: no .git, no tests.
-  tar -C "$RUNBOOKS_DIR/$r" --exclude .git --exclude tests --exclude .superpowers -cf - . \
-    | docker exec -i "$MGR" tar -C "/opt/ensfacil-runbooks/$r" -xf -
-  # The v1 installers refuse a group configuration with more than one
-  # <agent_config> block, which the lab portal adds (op.acc.5). Their
-  # localfile is already there from the first install: warn and go on.
-  docker exec -e ENSFACIL_SYSTEMCTL=/var/ossec/bin/wazuh-control "$MGR" \
-    bash "/opt/ensfacil-runbooks/$r/install-manager.sh" \
-    || warn "$r: install-manager.sh did not finish; check its localfile is in the ens group"
-done
 
 step "OSCompliance rules and localfile on the manager"
 OSC_WAZUH="$CORE_SRC/catalog/wazuh"

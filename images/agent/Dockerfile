@@ -1,5 +1,5 @@
-# Audited machine of the lab: Ubuntu 24.04 with wazuh-agent and what the Linux
-# runbooks need (jq, python3, cron, flock).
+# Audited machine of the lab: Ubuntu 24.04 with wazuh-agent and cron, which runs
+# oscompliance-agent.
 FROM ubuntu:24.04
 ARG WAZUH_VERSION
 ENV DEBIAN_FRONTEND=noninteractive

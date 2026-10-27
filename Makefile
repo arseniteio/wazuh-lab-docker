@@ -3,7 +3,7 @@
 
 .PHONY: up down status seed manager build-plugin logs
 
-up:            ## bring everything up (Wazuh, ENSFácil, runbooks and agent)
+up:            ## bring everything up (Wazuh, ENSFácil, engine and agent)
 	@bash scripts/up.sh
 
 down:          ## destroy the lab containers, volumes and certificates
@@ -15,7 +15,7 @@ status:        ## containers, agents and incoming facts
 seed:          ## repeat seeding and validation of the configuration
 	@bash scripts/seed.sh
 
-manager:       ## reinstall the manager side of the runbooks
+manager:       ## reinstall the manager side of OSCompliance
 	@bash scripts/manager-setup.sh
 
 build-plugin:  ## rebuild the zip from PLUGIN_SRC

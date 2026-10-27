@@ -1,19 +1,16 @@
-# ENSFácil lab: single-node Wazuh + one Linux agent running runbooks.
+# ENSFácil lab: single-node Wazuh + one Linux agent running oscompliance-agent.
 #
 # Based on the official wazuh-docker v4.14.7 single-node docker-compose.yml with
-# four changes, each explained where it happens:
+# three changes, each explained where it happens:
 #   1. The dashboard and the manager use their own images (images/).
 #   2. Only the dashboard is published, and only on 127.0.0.1: everything else
 #      talks over the compose network, so it never clashes with another Wazuh.
-#   3. The manager keeps /etc/ensfacil, /var/lib/ensfacil and /var/log/ensfacil
-#      in volumes (plugin guide 06 §13.3).
-#   4. An agent-01 service: Ubuntu with wazuh-agent and the runbooks.
+#   3. An agent-01 service: Ubuntu with wazuh-agent and oscompliance-agent.
 #
 # Not meant to be used by hand: `make up` and `make down` (see README).
 
 services:
   wazuh.manager:
-    # (1) Official + jq, flock and hostname, needed by the runbooks (guide 06 §13.2).
     build:
       context: images/manager
       args:
@@ -46,10 +43,6 @@ services:
       - wazuh_wodles:/var/ossec/wodles
       - filebeat_etc:/etc/filebeat
       - filebeat_var:/var/lib/filebeat
-      # (3) ENSFácil state on the manager.
-      - ensfacil_etc:/etc/ensfacil
-      - ensfacil_state:/var/lib/ensfacil
-      - ensfacil_log:/var/log/ensfacil
       - ./certs/root-ca-manager.pem:/etc/ssl/root-ca.pem
       - ./certs/wazuh.manager.pem:/etc/ssl/filebeat.pem
       - ./certs/wazuh.manager-key.pem:/etc/ssl/filebeat.key
@@ -107,9 +100,8 @@ services:
       - wazuh.indexer
       - wazuh.manager
 
-  # (4) Audited machine: Ubuntu with wazuh-agent, in the ens group. The runbooks
-  # are mounted read-only and their install.sh runs at startup, as on a real
-  # machine.
+  # (3) Audited machine: Ubuntu with wazuh-agent, in the ens group, running
+  # oscompliance-agent from build/oscompliance.
   agent-01:
     build:
       context: images/agent
@@ -118,10 +110,7 @@ services:
     image: ensfacil-lab/wazuh-agent:${WAZUH_VERSION}
     hostname: lab-agent-01
     restart: unless-stopped
-    environment:
-      - RUNBOOKS=${RUNBOOKS}
     volumes:
-      - ${RUNBOOKS_DIR}:/runbooks:ro
       # oscompliance-agent built by scripts/build-core.sh.
       - ./build/oscompliance:/opt/oscompliance:ro
       # Agent identity (client.keys) and configuration: survives recreating
@@ -134,7 +123,7 @@ services:
     # scripts/up.sh starts it in its own step, not plain `docker compose up`.
     profiles: [agents]
 
-  # (5) OSCompliance engine: reads the facts from the indexer, judges them and
+  # (4) OSCompliance engine: reads the facts from the indexer, judges them and
   # writes verdicts to the oscompliance-verdicts index. Binary built by
   # scripts/build-core.sh; one pass every 5 minutes.
   engine:
@@ -165,7 +154,4 @@ volumes:
   wazuh-indexer-data:
   wazuh-dashboard-config:
   wazuh-dashboard-custom:
-  ensfacil_etc:
-  ensfacil_state:
-  ensfacil_log:
   agent01_ossec_etc:

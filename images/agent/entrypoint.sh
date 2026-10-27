@@ -1,27 +1,15 @@
 #!/usr/bin/env bash
 # Startup of the audited machine:
-#   1. installs each runbook in $RUNBOOKS with its own install.sh (idempotent);
-#   2. prepares oscompliance-agent when it is mounted at /opt/oscompliance;
-#   3. starts rsyslog and sshd, so there is an auth.log with real logins;
-#   4. starts wazuh-agent, which enrolls with the manager;
-#   5. makes one sshd login, then keeps cron in the foreground: it runs the
+#   1. prepares oscompliance-agent when it is mounted at /opt/oscompliance;
+#   2. starts rsyslog and sshd, so there is an auth.log with real logins;
+#   3. starts wazuh-agent, which enrolls with the manager;
+#   4. makes one sshd login, then keeps cron in the foreground: it runs the
 #      collectors.
 set -eu
 
-for r in ${RUNBOOKS:-}; do
-  echo ">>> runbook $r"
-  # install.sh installs from its own folder; /runbooks being read-only does not matter.
-  ENSFACIL_SIN_DEPS=1 bash "/runbooks/$r/install.sh"
-  # logcollector skips whatever a file already holds when it first finds it,
-  # so the facts of the first run would be lost. Creating each runbook's fact
-  # file empty before the agent starts makes logcollector follow it from line 1.
-  sed -n 's:.*<location>\(/var/log/ensfacil/[^<]*\)</location>.*:\1:p' \
-    "/runbooks/$r/manager/agent.conf.fragment.xml" 2>/dev/null \
-  | while read -r f; do [ -e "$f" ] || { touch "$f"; chmod 640 "$f"; }; done
-done
-
 # oscompliance-agent only runs: its <localfile>, decoder and rules come from
-# the manager. Its fact file is created empty for the same reason as above.
+# the manager. logcollector skips whatever a file already holds when it first
+# finds it, so the fact file is created empty before the agent starts.
 OSC_AGENT=/opt/oscompliance/oscompliance-agent
 OSC_FACTS=/var/log/oscompliance/facts.ndjson
 if [ -x "$OSC_AGENT" ]; then
@@ -68,25 +56,19 @@ ssh-keygen -A >/dev/null
 
 /var/ossec/bin/wazuh-control start
 
-# Each runbook's <localfile> arrives with the ens group configuration, which
-# the manager sends after enrollment. Wait until logcollector is reading the
-# fact files before the first run.
+# The <localfile> entries arrive with the ens group configuration, which the
+# manager sends after enrollment. Wait until logcollector is reading them
+# before the first run.
 following() {
   grep -q "$1" /var/ossec/etc/shared/merged.mg 2>/dev/null \
     && grep -q "Analyzing file: '$1" /var/ossec/logs/ossec.log 2>/dev/null
 }
 for i in $(seq 1 90); do
-  { [ -z "${RUNBOOKS:-}" ] || following /var/log/ensfacil/; } \
-    && { [ ! -x "$OSC_AGENT" ] || following "$OSC_FACTS"; } \
+  { [ ! -x "$OSC_AGENT" ] || following "$OSC_FACTS"; } \
     && following /var/log/auth.log && following "$PORTAL_LOG" && break
   sleep 2
 done
 sleep 5
-
-# First run of the collectors without waiting for the hourly cron.
-for c in /usr/local/bin/ens_op*_collect.sh; do
-  [ -x "$c" ] && { echo ">>> first run: $c"; "$c" || echo "warning: $c exited with an error"; }
-done
 
 # One key-based sshd login as jperez, a named account: Wazuh turns it into a
 # rule 5715 alert, which is what EV-03 reads.
