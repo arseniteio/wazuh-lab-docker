@@ -6,7 +6,7 @@
 #
 # Steps, each one checked before moving on:
 #   1. lab certificates               scripts/certs.sh
-#   2. ENSFácil zip, OSCompliance     build/ (zip built if missing)
+#   2. Power ENS zip, OSCompliance     build/ (zip built if missing)
 #   3. indexer, manager, dashboard    docker compose up
 #   4. dashboard tuning + manager     scripts/dashboard-setup.sh, manager-setup.sh
 #   5. plugin configuration           scripts/seed.sh
@@ -19,14 +19,14 @@ set -euo pipefail
 
 bash "$LAB_DIR/scripts/certs.sh"
 
-step "ENSFácil plugin $ENSFACIL_VERSION"
-ZIP="$LAB_DIR/build/ensfacil-$ENSFACIL_VERSION-osd-2.19.5.zip"
+step "Power ENS plugin $POWER_ENS_VERSION"
+ZIP="$LAB_DIR/build/power-ens-$POWER_ENS_VERSION-osd-2.19.5.zip"
 if [ "${REBUILD:-}" = 1 ] || [ ! -f "$ZIP" ]; then
   bash "$LAB_DIR/scripts/build-plugin.sh"
 else
   ok "using $ZIP (REBUILD=1 to rebuild)"
 fi
-cp "$ZIP" "$LAB_DIR/images/dashboard/ensfacil-2.19.5.zip"
+cp "$ZIP" "$LAB_DIR/images/dashboard/power-ens-2.19.5.zip"
 
 # Always rebuilt: it takes seconds and the lab must run the current code.
 bash "$LAB_DIR/scripts/build-core.sh"
@@ -74,6 +74,6 @@ cat <<END
 
 Lab is up.
   Dashboard:  https://localhost:$DASHBOARD_PORT   (admin / $INDEXER_PASSWORD, lab only)
-  ENSFácil:   menu > Security operations > ENSFácil
+  Power ENS:   menu > Security operations > Power ENS
   Destroy:    make down
 END

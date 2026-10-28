@@ -1,9 +1,9 @@
-# ENSFácil lab. Each target only calls a script in scripts/, so the same steps
+# Power ENS lab. Each target only calls a script in scripts/, so the same steps
 # work by hand, in GitLab CI or in GitHub Actions.
 
 .PHONY: up down status seed manager build-plugin logs
 
-up:            ## bring everything up (Wazuh, ENSFácil, engine and agent)
+up:            ## bring everything up (Wazuh, Power ENS, engine and agent)
 	@bash scripts/up.sh
 
 down:          ## destroy the lab containers, volumes and certificates

@@ -87,7 +87,7 @@ ssh -i /root/.ssh/lab_login -o BatchMode=yes -o StrictHostKeyChecking=no jperez@
 
 if [ -x "$OSC_AGENT" ]; then
   echo ">>> first run: $OSC_AGENT"
-  "$OSC_AGENT" -output "$OSC_FACTS" || echo "warning: $OSC_AGENT exited with an error"
+  "$OSC_AGENT" || echo "warning: $OSC_AGENT exited with an error"
 fi
 
 exec cron -f

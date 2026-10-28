@@ -1,4 +1,4 @@
-# ENSFácil lab: single-node Wazuh + one Linux agent running oscompliance-agent.
+# Power ENS lab: single-node Wazuh + one Linux agent running oscompliance-agent.
 #
 # Based on the official wazuh-docker v4.14.7 single-node docker-compose.yml with
 # three changes, each explained where it happens:
@@ -15,7 +15,7 @@ services:
       context: images/manager
       args:
         WAZUH_VERSION: ${WAZUH_VERSION}
-    image: ensfacil-lab/wazuh-manager:${WAZUH_VERSION}
+    image: power-ens-lab/wazuh-manager:${WAZUH_VERSION}
     hostname: wazuh.manager
     restart: unless-stopped
     ulimits:
@@ -68,13 +68,13 @@ services:
       - ./config/wazuh_indexer/internal_users.yml:/usr/share/wazuh-indexer/config/opensearch-security/internal_users.yml
 
   wazuh.dashboard:
-    # (1) Official + the ENSFácil zip installed (guide 06 §3).
+    # (1) Official + the Power ENS zip installed (guide 06 §3).
     build:
       context: images/dashboard
       args:
         WAZUH_VERSION: ${WAZUH_VERSION}
-        ENSFACIL_VERSION: ${ENSFACIL_VERSION}
-    image: ensfacil-lab/wazuh-dashboard-ensfacil:${ENSFACIL_VERSION}
+        POWER_ENS_VERSION: ${POWER_ENS_VERSION}
+    image: power-ens-lab/wazuh-dashboard-power-ens:${POWER_ENS_VERSION}
     hostname: wazuh.dashboard
     restart: unless-stopped
     # (2) Only on your Mac, on a port no other Wazuh uses.
@@ -107,7 +107,7 @@ services:
       context: images/agent
       args:
         WAZUH_VERSION: ${WAZUH_VERSION}
-    image: ensfacil-lab/wazuh-agent:${WAZUH_VERSION}
+    image: power-ens-lab/wazuh-agent:${WAZUH_VERSION}
     hostname: lab-agent-01
     restart: unless-stopped
     volumes:

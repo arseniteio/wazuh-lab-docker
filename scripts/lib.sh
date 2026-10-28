@@ -11,9 +11,9 @@ LAB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # docker-compose.yml reads these variables from the environment.
 export COMPOSE_PROJECT_NAME WAZUH_VERSION DASHBOARD_PORT \
        INDEXER_PASSWORD API_PASSWORD ENGINE_API_USER ENGINE_API_PASSWORD CORE_SRC
-ENSFACIL_VERSION="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' \
+POWER_ENS_VERSION="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' \
   "$PLUGIN_SRC/opensearch_dashboards.json" 2>/dev/null || echo unknown)"
-export ENSFACIL_VERSION
+export POWER_ENS_VERSION
 COMPOSE=(docker compose -f "$LAB_DIR/docker-compose.yml" --profile agents)
 NETWORK="${COMPOSE_PROJECT_NAME}_default"
 MGR="${COMPOSE_PROJECT_NAME}-wazuh.manager-1"
@@ -23,7 +23,7 @@ ok()   { printf '\033[32m  ok: %s\033[0m\n' "$*"; }
 warn() { printf '\033[33m  warning: %s\033[0m\n' "$*" >&2; }
 die()  { printf '\033[31m  ERROR: %s\033[0m\n' "$*" >&2; exit 1; }
 
-plugin_version() { echo "$ENSFACIL_VERSION"; }
+plugin_version() { echo "$POWER_ENS_VERSION"; }
 
 # ix <path> [curl options]: request to the indexer with the admin certificate,
 # from a container on the lab network (the indexer certificate is only valid

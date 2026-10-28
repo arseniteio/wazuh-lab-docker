@@ -2,7 +2,7 @@
 ###############################################################################
 # dashboard-setup.sh · lab-only tuning of the Wazuh app in the dashboard.
 #
-# ENSFácil reads the agent inventory from wazuh-monitoring-*, which the Wazuh
+# Power ENS reads the agent inventory from wazuh-monitoring-*, which the Wazuh
 # app writes every 900 s by default. In the lab that means waiting up to
 # 15 minutes before a new agent shows up in the panel, so it is lowered to
 # 60 s. The setting needs a dashboard restart. Idempotent.

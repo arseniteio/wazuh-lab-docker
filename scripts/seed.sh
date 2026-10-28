@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ###############################################################################
-# seed.sh · leaves the ENSFácil configuration ready (plugin guide 06 §6, §8, §9).
+# seed.sh · leaves the Power ENS configuration ready (plugin guide 06 §6, §8, §9).
 #
 #   1. First save of the `active` document, if missing, through the plugin
 #      API with the lab admin user.
@@ -32,7 +32,7 @@ else
   BODY="$(node_plugin node:22-alpine npx --yes tsx /lab/default-config.ts)"
   CODE="$(curl -sk -o "$LAB_DIR/build/first-save.json" -w '%{http_code}' -X PUT \
     -u "admin:$INDEXER_PASSWORD" -H 'osd-xsrf: true' -H 'Content-Type: application/json' \
-    "https://localhost:$DASHBOARD_PORT/api/ensfacil/configuration" --data-binary "$BODY")"
+    "https://localhost:$DASHBOARD_PORT/api/powerEns/configuration" --data-binary "$BODY")"
   [ "$CODE" = 200 ] || { cat "$LAB_DIR/build/first-save.json" >&2; die "first save returned $CODE"; }
   ok "active document created"
 fi

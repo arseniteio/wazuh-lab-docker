@@ -1,14 +1,14 @@
 # wazuh-lab-docker
 
-Local end-to-end test environment for ENSFácil: Wazuh 4.14.7 (indexer, manager,
-dashboard) with the ENSFácil plugin installed, OSCompliance rules on the
+Local end-to-end test environment for Power ENS: Wazuh 4.14.7 (indexer, manager,
+dashboard) with the Power ENS plugin installed, OSCompliance rules on the
 manager, and an Ubuntu agent that runs `oscompliance-agent`, built from
 `oscompliance-ens`. An `engine` container judges its facts.
 
 ## Requirements
 
 - Docker with Compose v2. Tested on OrbStack, Apple Silicon, 12 GB allocated.
-- Image `ensfacil-osd-builder:2.19.5`, built from `ci/osd-builder.Dockerfile` in
+- Image `power-ens-osd-builder:2.19.5`, built from `ci/osd-builder.Dockerfile` in
   the plugin repository.
 - Plugin and `oscompliance-ens` sources at the paths set in `lab.conf`.
 - Go, to build `oscompliance-agent`.
@@ -34,10 +34,10 @@ The certificate is signed by the lab CA.
 Plugin change: `REBUILD=1 make up`.
 Manager rules change: `make manager`.
 Engine change: `bash scripts/build-core.sh`, then
-`docker restart ensfacil-lab-engine-1`.
+`docker restart power-ens-lab-engine-1`.
 Agent change: `bash scripts/build-core.sh`; the next hourly pass (minute 17)
 runs it, or run it now:
-`docker exec ensfacil-lab-agent-01-1 /opt/oscompliance/oscompliance-agent`.
+`docker exec power-ens-lab-agent-01-1 /opt/oscompliance/oscompliance-agent`.
 Rule change in `catalog/wazuh/`: `make manager`.
 
 ## Configuration
@@ -47,7 +47,7 @@ overrides go in `lab.conf.local` (not versioned).
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `COMPOSE_PROJECT_NAME` | `ensfacil-lab` | Prefix for containers, volumes and network |
+| `COMPOSE_PROJECT_NAME` | `power-ens-lab` | Prefix for containers, volumes and network |
 | `WAZUH_VERSION` | `4.14.7` | Wazuh images and agent package |
 | `PLUGIN_SRC` | plugin repository path | Plugin source, mounted read-only |
 | `CORE_SRC` | `oscompliance-ens` path | Agent source and manager rules (`catalog/wazuh/`) |

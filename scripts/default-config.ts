@@ -7,7 +7,7 @@ import { defaultENSConfigurationTemplate } from '/w/common/ens/configuration/dat
 process.stdout.write(
   JSON.stringify({
     configuration: { ...defaultENSConfigurationTemplate, scope: { mode: 'group', agentIds: [], groupIds: ['ens'] } },
-    changeReason: 'First save of the lab (ensfacil-lab).',
+    changeReason: 'First save of the lab (power-ens-lab).',
     expectedVersion: null,
   })
 );
