@@ -10,9 +10,9 @@
 #   3. indexer, manager, dashboard    docker compose up
 #   4. dashboard tuning + manager     scripts/dashboard-setup.sh, manager-setup.sh
 #   5. plugin configuration           scripts/seed.sh
-#   6. agent running oscompliance     agent-01 service
-#      and oscompliance-agent
-#   7. oscompliance-engine            engine service
+#   6. oscompliance-engine            engine service (it writes the ens
+#                                     group configuration the agent needs)
+#   7. agent running oscompliance     agent-01 service
 ###############################################################################
 set -euo pipefail
 . "$(dirname "$0")/lib.sh"
@@ -44,6 +44,12 @@ bash "$LAB_DIR/scripts/dashboard-setup.sh"
 bash "$LAB_DIR/scripts/manager-setup.sh"
 bash "$LAB_DIR/scripts/seed.sh"
 
+step "Starting the OSCompliance engine"
+# Recreated so it always runs the binary just built.
+"${COMPOSE[@]}" up -d --force-recreate engine
+wait_for "ens group configuration written by the engine" 300 \
+  docker exec "$MGR" grep -q "oscompliance begin" /var/ossec/etc/shared/ens/agent.conf
+
 step "Starting the agent"
 "${COMPOSE[@]}" up -d agent-01
 wait_for "agent active on the manager" 300 docker exec "$MGR" sh -c '/var/ossec/bin/agent_control -l | grep "lab-agent-01" | grep -q Active'
@@ -53,9 +59,6 @@ osc_facts_ok() {
   | grep -Eq '"count":[1-9]'
 }
 wait_for "first oscompliance facts in the indexer" 300 osc_facts_ok
-step "Starting the OSCompliance engine"
-# Recreated so it always runs the binary just built.
-"${COMPOSE[@]}" up -d --force-recreate engine
 verdicts_ok() {
   ix 'oscompliance-verdicts/_count' -H 'Content-Type: application/json' \
     -d '{"query":{"term":{"agent.name":"lab-agent-01"}}}' \

@@ -10,7 +10,7 @@ LAB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # docker-compose.yml reads these variables from the environment.
 export COMPOSE_PROJECT_NAME WAZUH_VERSION DASHBOARD_PORT \
-       INDEXER_PASSWORD API_PASSWORD CORE_SRC
+       INDEXER_PASSWORD API_PASSWORD ENGINE_API_USER ENGINE_API_PASSWORD CORE_SRC
 ENSFACIL_VERSION="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' \
   "$PLUGIN_SRC/opensearch_dashboards.json" 2>/dev/null || echo unknown)"
 export ENSFACIL_VERSION

@@ -50,6 +50,15 @@ for c in $CONTROLS; do
 done
 echo; ok "controls seeded"
 
+step "Lab parameter values (scripts/lab-parameters.json)"
+OUT="$(docker run --rm --network "$NETWORK" \
+  -v "$LAB_DIR/certs:/certs:ro" -v "$PLUGIN_SRC:/plugin:ro" -v "$LAB_DIR/scripts:/lab:ro" \
+  -e PYTHONDONTWRITEBYTECODE=1 \
+  -e OS_CERT=/certs/admin.pem -e OS_KEY=/certs/admin-key.pem -e OS_CA=/certs/root-ca.pem \
+  -e ENS_OS_URL=https://wazuh.indexer:9200 -w /plugin/config python:3.12-slim \
+  python3 set-parameters.py /lab/lab-parameters.json --apply </dev/null 2>&1)" || { echo "$OUT" >&2; die "lab parameters failed"; }
+ok "lab parameters set"
+
 step "Validating the document"
 ix wazuh-ens-configuration/_doc/active > "$LAB_DIR/build/active.json"
 node_plugin -v "$LAB_DIR/build/active.json:/tmp/active.json:ro" node:22-alpine \

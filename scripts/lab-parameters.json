@@ -1,0 +1,38 @@
+{
+  "op.acc.2": {
+    "P-06": [
+      "ops | /etc/ssh | lectura"
+    ],
+    "P-08": [
+      "/etc/ssh | 755 | root:root",
+      "/etc/sudoers.d | 750 | root:root"
+    ]
+  },
+  "op.acc.3": {
+    "P-02": [
+      "desarrollo | operacion",
+      "autorizacion | control"
+    ],
+    "P-04": [
+      "cambio de privilegios | 2 | usermod | gpasswd"
+    ],
+    "P-06": 30
+  },
+  "op.acc.4": {
+    "P-03": 180,
+    "P-08": [
+      "2026-09-15 | servidores del laboratorio | Responsable de Seguridad"
+    ]
+  },
+  "op.acc.5": {
+    "P-02": [
+      "sede | lab-agent-01 | /var/log/lab-portal/auth.json"
+    ]
+  },
+  "op.acc.6": {
+    "P-06": 24,
+    "P-12": [
+      "jperez | 2026-10-01 | baja"
+    ]
+  }
+}

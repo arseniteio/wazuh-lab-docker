@@ -130,12 +130,19 @@ services:
     image: alpine:3.20
     restart: unless-stopped
     entrypoint: ["/opt/oscompliance/oscompliance-engine"]
-    command: ["-indexer", "https://wazuh.indexer:9200", "-ca", "/certs/root-ca.pem", "-interval", "5m"]
+    # It also writes the ens group configuration through the Wazuh API, whose
+    # self-signed certificate only names localhost.
+    command: ["-indexer", "https://wazuh.indexer:9200", "-ca", "/certs/root-ca.pem", "-interval", "5m",
+              "-wazuh-api", "https://wazuh.manager:55000", "-wazuh-api-user", "${ENGINE_API_USER}",
+              "-wazuh-api-ca", "/wazuh-api/ssl/server.crt", "-wazuh-api-server-name", "localhost",
+              "-sync-interval", "5m", "-sync-apply"]
     environment:
       - OSC_INDEXER_PASSWORD=${INDEXER_PASSWORD}
+      - OSC_WAZUH_API_PASSWORD=${ENGINE_API_PASSWORD}
     volumes:
       - ./build/oscompliance:/opt/oscompliance:ro
       - ./certs:/certs:ro
+      - wazuh_api_configuration:/wazuh-api:ro
     depends_on:
       - wazuh.indexer
 

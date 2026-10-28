@@ -3,9 +3,12 @@
 # manager-setup.sh · installs the manager side of OSCompliance.
 #
 #   1. Creates the ens group the agent enrolls into.
-#   2. Installs the OSCompliance rules from $CORE_SRC/catalog/wazuh and adds
-#      its <localfile> to the ens group agent.conf, plus the lab portal log
-#      for lab-agent-01. The manager restarts only when one of them changed.
+#   2. Installs the OSCompliance rules from $CORE_SRC/catalog/wazuh and, for the
+#      lab machine only, the auth.log localfile its sshd logins reach Wazuh by.
+#   3. Creates the Wazuh API user the engine writes the group configuration
+#      with, holding only the role of catalog/wazuh/engine-api-role.json.
+#   The rest of the group configuration (facts, audit log, paths, services)
+#   is written by the engine from the ENS configuration.
 #
 # Idempotent: nothing restarts when nothing changed.
 ###############################################################################
@@ -21,7 +24,7 @@ else
 fi
 
 
-step "OSCompliance rules and localfile on the manager"
+step "OSCompliance rules on the manager"
 OSC_WAZUH="$CORE_SRC/catalog/wazuh"
 OSC_RULES=oscompliance_facts_rules.xml
 [ -f "$OSC_WAZUH/$OSC_RULES" ] || die "no $OSC_RULES in $OSC_WAZUH"
@@ -60,62 +63,6 @@ sys.stdout.write(conf[:i] + "\n<localfile>\n  <log_format>syslog</log_format>\n 
   ok "localfile /var/log/auth.log added to the ens group"
 fi
 
-osc_location="$(sed -n 's:.*<location>\(.*\)</location>.*:\1:p' "$OSC_WAZUH/agent.conf.fragment.xml")"
-if docker exec "$MGR" grep -q "<location>$osc_location</location>" "$AGENT_CONF"; then
-  ok "localfile $osc_location already in the ens group"
-else
-  # The fragment goes right before the closing </agent_config>, comment lines dropped.
-  tmp="$(mktemp)"
-  docker exec "$MGR" cat "$AGENT_CONF" \
-  | python3 -c '
-import sys
-conf, frag = sys.stdin.read(), open(sys.argv[1]).read()
-frag = "".join(l for l in frag.splitlines(True) if not l.lstrip().startswith("<!--"))
-i = conf.index("</agent_config>", conf.index("<agent_config>"))
-sys.stdout.write(conf[:i] + "\n" + frag + conf[i:])
-' "$OSC_WAZUH/agent.conf.fragment.xml" > "$tmp"
-  docker cp -q "$tmp" "$MGR:$AGENT_CONF"
-  rm -f "$tmp"
-  docker exec "$MGR" chown wazuh:wazuh "$AGENT_CONF"
-  docker exec "$MGR" chmod 660 "$AGENT_CONF"
-  osc_changed=1
-  ok "localfile $osc_location added to the ens group"
-fi
-
-# Lab machine only: the log of a simulated external-user portal (op.acc.5),
-# declared for lab-agent-01 alone, as P-02 declares a service per machine.
-# The label names the service on every event (rule 119003).
-if docker exec "$MGR" grep -q "<label key=\"oscompliance_service\">sede</label>" "$AGENT_CONF"; then
-  ok "lab portal log already declared for lab-agent-01"
-else
-  docker exec -i "$MGR" sh -c "cat >> $AGENT_CONF" <<'XML'
-
-<agent_config name="lab-agent-01">
-  <localfile>
-    <log_format>json</log_format>
-    <location>/var/log/lab-portal/auth.json</location>
-    <label key="oscompliance_service">sede</label>
-  </localfile>
-</agent_config>
-XML
-  osc_changed=1
-  ok "lab portal log declared for lab-agent-01"
-fi
-
-# Paths that come from parameters (op.acc.2 P-08 rights and P-06 audited
-# resources, op.acc.3 P-03 binaries and security paths) travel as a shared
-# file of the group: Wazuh copies it to every
-# agent of the group and oscompliance-agent reads it. Lab values: what the
-# lab machine has.
-OSC_SHARED=/var/ossec/etc/shared/ens/oscompliance.json
-osc_paths='{"acl_paths":["/etc/ssh","/etc/sudoers.d"],"audit_watches":["/etc/ssh","/var/ossec/etc","/etc/audit","/var/log/audit"],"exec_watches":["/usr/bin/git","/usr/bin/systemctl","/usr/bin/crontab","/usr/sbin/visudo","/usr/sbin/usermod","/usr/sbin/useradd","/usr/bin/nano","/usr/bin/vim","/usr/bin/tee","/usr/bin/apt","/usr/bin/dpkg","/usr/bin/apt-get","/usr/sbin/ausearch","/usr/sbin/auditctl"]}'
-if [ "$(docker exec "$MGR" cat "$OSC_SHARED" 2>/dev/null)" = "$osc_paths" ]; then
-  ok "shared oscompliance.json already up to date"
-else
-  printf '%s' "$osc_paths" | docker exec -i "$MGR" sh -c "cat > $OSC_SHARED && chown wazuh:wazuh $OSC_SHARED && chmod 660 $OSC_SHARED"
-  ok "shared oscompliance.json written"
-fi
-
 docker exec "$MGR" /var/ossec/bin/wazuh-analysisd -t >/dev/null || die "manager configuration is not valid"
 if [ "$osc_changed" = 1 ]; then
   docker exec "$MGR" /var/ossec/bin/wazuh-control restart >/dev/null
@@ -123,3 +70,35 @@ if [ "$osc_changed" = 1 ]; then
 fi
 
 docker exec "$MGR" /var/ossec/bin/wazuh-analysisd -t >/dev/null && ok "manager configuration is valid"
+
+step "Wazuh API user of the engine"
+api() {
+  local token
+  token="$(docker run --rm --network "$NETWORK" curlimages/curl:8.10.1 -sk -u "wazuh-wui:$API_PASSWORD" \
+    -X POST "https://wazuh.manager:55000/security/user/authenticate?raw=true")"
+  docker run --rm -i --network "$NETWORK" curlimages/curl:8.10.1 -sk -X "$1" \
+    -H "Authorization: Bearer $token" -H 'Content-Type: application/json' "https://wazuh.manager:55000$2" "${@:3}"
+}
+id_of() { python3 -c 'import json,sys; items=json.load(sys.stdin)["data"]["affected_items"]; print(items[0]["id"] if items else "")'; }
+
+wait_for "Wazuh API" 300 sh -c "docker run --rm --network $NETWORK curlimages/curl:8.10.1 -sk -o /dev/null -w %{http_code} -u wazuh-wui:'$API_PASSWORD' -X POST https://wazuh.manager:55000/security/user/authenticate | grep -q 200"
+
+ROLE_FILE="$CORE_SRC/catalog/wazuh/engine-api-role.json"
+role_name="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["role"])' "$ROLE_FILE")"
+policy_body="$(python3 -c 'import json,sys; print(json.dumps(json.load(open(sys.argv[1]))["policy"]))' "$ROLE_FILE")"
+policy_name="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["policy"]["name"])' "$ROLE_FILE")"
+
+user_id="$(api GET "/security/users?search=$ENGINE_API_USER" | id_of)"
+if [ -n "$user_id" ]; then
+  ok "user $ENGINE_API_USER already exists"
+else
+  policy_id="$(api GET "/security/policies?search=$policy_name" | id_of)"
+  [ -n "$policy_id" ] || policy_id="$(printf '%s' "$policy_body" | api POST /security/policies --data-binary @- | id_of)"
+  role_id="$(api GET "/security/roles?search=$role_name" | id_of)"
+  [ -n "$role_id" ] || role_id="$(api POST /security/roles -d "{\"name\":\"$role_name\"}" | id_of)"
+  api POST "/security/roles/$role_id/policies?policy_ids=$policy_id" >/dev/null
+  user_id="$(api POST /security/users -d "{\"username\":\"$ENGINE_API_USER\",\"password\":\"$ENGINE_API_PASSWORD\"}" | id_of)"
+  [ -n "$user_id" ] || die "could not create the API user $ENGINE_API_USER"
+  api POST "/security/users/$user_id/roles?role_ids=$role_id" >/dev/null
+  ok "user $ENGINE_API_USER created with role $role_name"
+fi

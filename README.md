@@ -63,10 +63,10 @@ overrides go in `lab.conf.local` (not versioned).
 | `oscompliance-agent` and `oscompliance-engine`, always rebuilt | `scripts/build-core.sh` | Linux binaries in `build/oscompliance/` |
 | Indexer, manager, dashboard | `docker-compose.yml` | Indexer green/yellow, analysisd running, dashboard green |
 | Agent inventory interval to 60 s | `scripts/dashboard-setup.sh` | Dashboard green after restart |
-| `ens` group, OSCompliance manager rules and `<localfile>` | `scripts/manager-setup.sh` | Each installer's `wazuh-logtest` check passes, configuration valid |
+| `ens` group, OSCompliance rules, the engine's Wazuh API user | `scripts/manager-setup.sh` | Configuration valid, API user created |
 | First configuration save, seeding, validation | `scripts/seed.sh` | `APPLIED` per control, document valid |
-| Agent `lab-agent-01` | `agent-01` service | Agent active, OSCompliance facts (rule 119001) indexed, agent in inventory |
-| OSCompliance engine, one pass every 5 minutes | `engine` service | Verdicts for `lab-agent-01` in `oscompliance-verdicts` |
+| OSCompliance engine, one pass every 5 minutes | `engine` service | Its region in the `ens` group configuration |
+| Agent `lab-agent-01` | `agent-01` service | Agent active, OSCompliance facts (rule 119001) indexed, verdicts in `oscompliance-verdicts`, agent in inventory |
 
 All steps are idempotent.
 
@@ -91,8 +91,10 @@ lab.conf             lab settings
 - The agent container runs rsyslog and sshd and makes one key-based login as
   `jperez` at startup, so `auth.log` carries a real login (op.acc.1 EV-03).
   `manager-setup.sh` adds `/var/log/auth.log` to the `ens` group for it.
-- `oscompliance-agent` only runs: its `<localfile>` reaches the agent through
-  the `ens` group `agent.conf`, and its rules live on the manager.
+- `oscompliance-agent` only runs: its `<localfile>` and the paths it reads
+  reach it through the `ens` group `agent.conf`, which the engine writes from
+  the ENS configuration through the Wazuh API (`-sync-apply`). Lab parameter
+  values: `scripts/lab-parameters.json`.
 - Each step is a standalone script, reusable as a CI job.
 
 ## Known issues
