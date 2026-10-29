@@ -201,5 +201,37 @@
     ],
     "P-10": 7,
     "P-06": []
+  },
+  "op.exp.5": {
+    "P-01": [
+      "Configuración de Power ENS | registro P-10 | RFC-"
+    ],
+    "P-02": [
+      "peticion",
+      "fecha_registro",
+      "sistema",
+      "descripcion",
+      "riesgo",
+      "aprobado_por",
+      "fecha_aprobacion",
+      "ventana_inicio"
+    ],
+    "P-03": [
+      "cambio en el perímetro o en el cortafuegos",
+      "cambio en la autenticación o en los privilegios"
+    ],
+    "P-04": [
+      "Responsable de Seguridad del laboratorio | rsi"
+    ],
+    "P-06": [
+      "manual de explotación del laboratorio | gestor documental | 7"
+    ],
+    "P-07": [
+      "buzón | rsi@lab.power-ens.local"
+    ],
+    "P-09": 24,
+    "P-10": [
+      "RFC-STD-1 | 2026-10-01 | * | Cambios estándar del laboratorio: parcheado y operación diaria | bajo | rsi | 2026-10-01 | 2026-10-01 00:00 | | aprobada | | bajo"
+    ]
   }
 }
