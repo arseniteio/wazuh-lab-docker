@@ -140,5 +140,31 @@
     "P-05": 40,
     "P-07": "sí",
     "P-09": 24
+  },
+  "op.exp.3": {
+    "P-01": [
+      "tree"
+    ],
+    "P-03": [
+      "root",
+      "jperez"
+    ],
+    "P-05": 90,
+    "P-06": "PR-15 Gestión de cambios del laboratorio",
+    "P-07": [
+      "sistema | /var/backups/lab-etc-*.tgz | NAS del laboratorio"
+    ],
+    "P-09": 3,
+    "P-10": 24,
+    "P-11": [
+      "2026-10-15 | laboratorio | Responsable de Sistemas"
+    ],
+    "P-12": 30,
+    "P-ATT": [
+      "op.exp.3.3 | PR-15 Gestión de cambios del laboratorio | https://intranet.lab.power-ens.local/docs/pr-15.pdf | 2026-09-01 | Responsable de Seguridad",
+      "op.exp.3.4 | PR-16 Gestión de vulnerabilidades | https://intranet.lab.power-ens.local/docs/pr-16.pdf | 2026-09-01 | Responsable de Seguridad",
+      "op.exp.3.5 | PR-17 Gestión de incidentes | https://intranet.lab.power-ens.local/docs/pr-17.pdf | 2026-09-01 | Responsable de Seguridad",
+      "op.exp.3.r1.1 | Línea base de configuración del laboratorio v1 | https://intranet.lab.power-ens.local/docs/linea-base.pdf | 2026-09-01 | Responsable de Sistemas"
+    ]
   }
 }

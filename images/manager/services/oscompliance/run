@@ -24,6 +24,9 @@ while true; do
   "$AGENT" || echo "oscompliance-agent failed" >&2
   now=$(date +%s)
   if [ $((now - last_sweep)) -ge 86400 ]; then
+    # The daily copy of /etc that op.exp.3 P-07 declares for the lab.
+    install -d -m 700 /var/backups
+    tar czf "/var/backups/lab-etc-$(date +%F).tgz" -C / etc 2>/dev/null || echo "lab /etc copy failed" >&2
     "$AGENT" -collect sweep || echo "oscompliance sweep failed" >&2
     last_sweep=$now
   fi

@@ -44,6 +44,11 @@ SH
 chmod 755 /usr/local/bin/lab-portal
 echo "7 * * * * root /usr/local/bin/lab-portal" > /etc/cron.d/lab-portal
 
+# A daily copy of /etc for op.exp.3 EV-09: the lab declares it in op.exp.3 P-07.
+install -d -m 700 /var/backups
+echo '41 2 * * * root tar czf /var/backups/lab-etc-$(date +\%F).tgz -C / etc 2>/dev/null' > /etc/cron.d/lab-backup
+tar czf "/var/backups/lab-etc-$(date +%F).tgz" -C / etc 2>/dev/null || true
+
 # Authentication log for op.acc.1 EV-03: rsyslog writes /var/log/auth.log,
 # read by wazuh-agent through the ens group (scripts/manager-setup.sh).
 # rsyslog drops to the syslog user: the file needs Ubuntu's own ownership.
