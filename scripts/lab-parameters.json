@@ -204,7 +204,7 @@
   },
   "op.exp.5": {
     "P-01": [
-      "Configuración de Power ENS | registro P-10 | RFC-"
+      "power_ens | Configuración, P-10 | RFC-"
     ],
     "P-02": [
       "peticion",
@@ -224,10 +224,10 @@
       "Responsable de Seguridad del laboratorio | rsi"
     ],
     "P-06": [
-      "manual de explotación del laboratorio | gestor documental | 7"
+      "manual-explotacion | gestor documental | 7"
     ],
     "P-07": [
-      "buzón | rsi@lab.power-ens.local"
+      "buzon | rsi@lab.power-ens.local"
     ],
     "P-09": 24,
     "P-10": [
@@ -246,7 +246,7 @@
     ],
     "P-05": [
       "correo | pasarela de correo con antimalware",
-      "dispositivos extraíbles | bloqueados por política"
+      "dispositivos_extraibles | bloqueados por política"
     ],
     "P-06": 7,
     "P-08": [
@@ -259,5 +259,87 @@
       "active_response | si | firewall-drop ante fuerza bruta SSH"
     ],
     "P-10": "bloqueados"
+  },
+  "op.exp.7": {
+    "P-01": [
+      "código dañino | Media | 8 | no | detección de malware contenida",
+      "intrusión | Alta | 10 | no | acceso no autorizado",
+      "compromiso | Crítica | 12 | si | sistema comprometido o fuga"
+    ],
+    "P-02": [
+      "Media | RSI | 24 | correo",
+      "Alta | RSI | 4 | teléfono",
+      "Crítica | RSI | 1 | teléfono"
+    ],
+    "P-03": [
+      "registro de incidentes de Power ENS | Configuración, P-13 | RSI"
+    ],
+    "P-04": [
+      "lab-agent-01 | Responsable de Información | Responsable del Servicio",
+      "wazuh.manager | Responsable de Seguridad | Responsable de Sistemas"
+    ],
+    "P-05": [
+      "Media | 24 | 72",
+      "Alta | 4 | 48",
+      "Crítica | 1 | 24"
+    ],
+    "P-06": [
+      "LUCIA del CCN-CERT | organismo del laboratorio"
+    ],
+    "P-07": [],
+    "P-08": [
+      "logs de alertas del periodo | /var/ossec/logs/alerts sellados por Wazuh"
+    ],
+    "P-09": [
+      "firewall-drop | fuerza bruta SSH | equipo atacado | 600 s"
+    ],
+    "P-10": [
+      "cortafuegos-equipo | bloqueo de IP | respuesta activa de Wazuh"
+    ],
+    "P-11": [
+      "portal del CCN-CERT | RSI | malicious-ioc/malicious-ip | 30"
+    ],
+    "P-12": [
+      "19011 | SCA: comprobaciones, op.exp.2",
+      "19014 | SCA: comprobaciones, op.exp.2",
+      "5901 | alta de grupo: op.acc.1",
+      "5902 | alta de cuenta: op.acc.1"
+    ],
+    "P-13": [
+      "INC-LAB-1 | inicial | 2026-10-29 22:13 | Media | lab-agent-01 | código dañino | RSI |  | no |  | no |  | https://intranet.lab.power-ens.local/incidentes/INC-LAB-1 | ",
+      "INC-LAB-1 | intermedio | 2026-10-29 22:20 | Media | lab-agent-01 | código dañino |  | Responsable de Información, Responsable del Servicio | no |  | no |  | https://intranet.lab.power-ens.local/incidentes/INC-LAB-1 | ",
+      "INC-LAB-1 | final | 2026-10-29 22:30 | Media | lab-agent-01 | código dañino |  |  | no |  | no | fichero de prueba EICAR eliminado; escaneo diario confirmado | https://intranet.lab.power-ens.local/incidentes/INC-LAB-1 | 2026-10-29 22:40"
+    ]
+  },
+  "op.exp.9": {
+    "P-01": "Configuración de Power ENS (op.exp.7 P-13)",
+    "P-02": [
+      "inicial | detección y clasificación | 0",
+      "intermedio | contención y alcance | 1",
+      "final | resolución y medidas | 0"
+    ],
+    "P-03": [
+      "logs de alertas del periodo | /var/ossec/logs/alerts"
+    ],
+    "P-04": [
+      "acciones disciplinarias",
+      "responsabilidad de proveedores",
+      "delitos"
+    ],
+    "P-05": [
+      "/var/ossec/logs/alerts | firma .sum de Wazuh | solo el manager"
+    ],
+    "P-06": [
+      "penal | 1825"
+    ],
+    "P-07": [
+      "media | 15 | revisión de reglas y localfiles",
+      "alta | 7 | revisión de reglas y localfiles",
+      "critica | 3 | revisión de reglas y localfiles"
+    ],
+    "P-08": 10,
+    "P-09": [
+      "vulnerability-detector"
+    ]
   }
 }
