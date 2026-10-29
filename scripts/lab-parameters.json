@@ -341,5 +341,75 @@
     "P-09": [
       "vulnerability-detector"
     ]
+  },
+  "op.exp.8": {
+    "P-01": [
+      "autenticación | auth.log y sshd | 5",
+      "administración | auditd | 3"
+    ],
+    "P-02": [
+      "lab-agent-01 | ubuntu | servidor",
+      "wazuh.manager | amazon | manager"
+    ],
+    "P-04": 30,
+    "P-05": [
+      "ntp.ubuntu.com | NTP"
+    ],
+    "P-06": 1,
+    "P-07": [
+      "autenticación | 365",
+      "administración | 365"
+    ],
+    "P-08": [
+      "root | lectura | todos",
+      "syslog | escritura | /var/log"
+    ],
+    "P-09": [
+      "índices de alertas | repositorio lab-backups | diaria | sí"
+    ],
+    "P-10": [
+      "wazuh | todos los eventos de P-01 | sí",
+      "propias | reglas de OSCompliance | no"
+    ],
+    "P-11": [
+      "firewall-drop | fuerza bruta SSH | equipo atacado | 600 s"
+    ],
+    "P-12": 2,
+    "P-13": [
+      "2026-10-15 | Responsable de Seguridad | autenticaciones y sudo | sin hallazgos"
+    ]
+  },
+  "op.exp.10": {
+    "P-01": [
+      "clave de host SSH | SSH | fichero | /etc/ssh/ssh_host_ed25519_key | Responsable de Sistemas | activa | "
+    ],
+    "P-03": [
+      "cifrado | chacha20-poly1305 | 256",
+      "cifrado | aes256-gcm | 256",
+      "cifrado | aes128-gcm | 128",
+      "cifrado | aes256-ctr | 256",
+      "mac | hmac-sha2-256 | ",
+      "mac | hmac-sha2-512 | ",
+      "kex | curve25519 | ",
+      "kex | ecdh-sha2-nistp | ",
+      "kex | diffie-hellman-group16-sha512 | ",
+      "kex | diffie-hellman-group18-sha512 | ",
+      "kex | diffie-hellman-group-exchange-sha256 | ",
+      "firma | ssh-ed25519 | ",
+      "firma | ecdsa-sha2-nistp | ",
+      "firma | rsa-sha2-512 | ",
+      "firma | rsa-sha2-256 | "
+    ],
+    "P-04": [
+      "sshd | * | 22"
+    ],
+    "P-05": [
+      "lab-agent-01 | explotacion | sin acceso al equipo de generación"
+    ],
+    "P-06": [
+      "archivo cifrado del laboratorio | NAS | fuera de la red de explotación"
+    ],
+    "P-07": "PR-20 Ciclo de vida de las claves del laboratorio",
+    "P-10": 30
   }
 }
