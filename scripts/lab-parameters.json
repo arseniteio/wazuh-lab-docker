@@ -128,5 +128,17 @@
     "P-09": [
       "2026-10-01 | todo el laboratorio | Responsable de Sistemas"
     ]
+  },
+  "op.exp.2": {
+    "P-03": [
+      "admin | genérica",
+      "guest | genérica",
+      "test | genérica",
+      "oracle | Oracle Database",
+      "tomcat | Apache Tomcat"
+    ],
+    "P-05": 40,
+    "P-07": "sí",
+    "P-09": 24
   }
 }
