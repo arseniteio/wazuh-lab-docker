@@ -101,5 +101,32 @@
     ],
     "P-08": "no",
     "P-12": ".adm"
+  },
+  "op.exp.1": {
+    "P-01": [
+      "lab-agent-01 | Responsable de Sistemas | Administración | servidor",
+      "wazuh.manager | Responsable de Seguridad | SIEM | servidor"
+    ],
+    "P-02": [
+      "docker-gateway | electrónica de red | 192.168.167.1 | Responsable de Sistemas",
+      "wazuh.dashboard | servidor | 192.168.167.2 | Responsable de Seguridad",
+      "wazuh.indexer | servidor | 192.168.167.5 | Responsable de Seguridad",
+      "oscompliance-engine | servidor | 192.168.167.6 | Responsable de Seguridad"
+    ],
+    "P-03": [
+      "servidor",
+      "estación de trabajo",
+      "electrónica de red",
+      "servicio",
+      "aplicación",
+      "soporte",
+      "instalación"
+    ],
+    "P-04": 90,
+    "P-05": "periódica",
+    "P-08": 24,
+    "P-09": [
+      "2026-10-01 | todo el laboratorio | Responsable de Sistemas"
+    ]
   }
 }

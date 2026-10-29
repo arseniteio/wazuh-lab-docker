@@ -88,12 +88,20 @@ role_name="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["ro
 policy_body="$(python3 -c 'import json,sys; print(json.dumps(json.load(open(sys.argv[1]))["policy"]))' "$ROLE_FILE")"
 policy_name="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["policy"]["name"])' "$ROLE_FILE")"
 
+# The policy follows the role file: created the first time, rewritten after, so new actions reach a lab
+# that already has the user.
+policy_id="$(api GET "/security/policies?search=$policy_name" | id_of)"
+if [ -n "$policy_id" ]; then
+  printf '%s' "$policy_body" | api PUT "/security/policies/$policy_id" --data-binary @- >/dev/null
+  ok "policy $policy_name updated"
+else
+  policy_id="$(printf '%s' "$policy_body" | api POST /security/policies --data-binary @- | id_of)"
+fi
+
 user_id="$(api GET "/security/users?search=$ENGINE_API_USER" | id_of)"
 if [ -n "$user_id" ]; then
   ok "user $ENGINE_API_USER already exists"
 else
-  policy_id="$(api GET "/security/policies?search=$policy_name" | id_of)"
-  [ -n "$policy_id" ] || policy_id="$(printf '%s' "$policy_body" | api POST /security/policies --data-binary @- | id_of)"
   role_id="$(api GET "/security/roles?search=$role_name" | id_of)"
   [ -n "$role_id" ] || role_id="$(api POST /security/roles -d "{\"name\":\"$role_name\"}" | id_of)"
   api POST "/security/roles/$role_id/policies?policy_ids=$policy_id" >/dev/null
