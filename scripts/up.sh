@@ -8,7 +8,8 @@
 #   1. lab certificates               scripts/certs.sh
 #   2. Power ENS zip, OSCompliance     build/ (zip built if missing)
 #   3. indexer, manager, dashboard    docker compose up
-#   4. dashboard tuning + manager     scripts/dashboard-setup.sh, manager-setup.sh
+#   4. dashboard, manager, indexer    scripts/dashboard-setup.sh, manager-setup.sh,
+#                                     indexer-setup.sh
 #   5. plugin configuration           scripts/seed.sh
 #   6. oscompliance-engine            engine service (it writes the ens
 #                                     group configuration the agent needs)
@@ -42,6 +43,7 @@ wait_for "dashboard" 400 sh -c "curl -sk -u 'admin:$INDEXER_PASSWORD' https://lo
 
 bash "$LAB_DIR/scripts/dashboard-setup.sh"
 bash "$LAB_DIR/scripts/manager-setup.sh"
+bash "$LAB_DIR/scripts/indexer-setup.sh"
 bash "$LAB_DIR/scripts/seed.sh"
 
 step "Starting the OSCompliance engine"

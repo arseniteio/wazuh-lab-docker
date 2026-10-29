@@ -3,6 +3,8 @@ node.name: "wazuh.indexer"
 cluster.name: "wazuh-cluster"
 path.data: /var/lib/wazuh-indexer
 path.logs: /var/log/wazuh-indexer
+# Snapshots of the indices for op.exp.8 EV-09 (scripts/indexer-setup.sh).
+path.repo: /var/lib/wazuh-indexer/snapshots
 discovery.type: single-node
 compatibility.override_main_response_version: true
 plugins.security.ssl.http.pemcert_filepath: /usr/share/wazuh-indexer/config/certs/wazuh.indexer.pem
