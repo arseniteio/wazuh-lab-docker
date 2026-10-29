@@ -27,6 +27,13 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/* \
  && sed -i 's/^module(load="imklog"/#&/' /etc/rsyslog.conf
 
+# ClamAV for op.exp.6: clamd logs to syslog, which is how Wazuh decodes its detections. The signatures
+# are downloaded when the container starts.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends clamav clamav-daemon clamav-freshclam clamdscan \
+ && rm -rf /var/lib/apt/lists/* \
+ && sed -i 's/^LogSyslog false/LogSyslog true/' /etc/clamav/clamd.conf
+
 # Person accounts so op.acc.1 has something to observe.
 RUN useradd -m -s /bin/bash -u 1001 jperez \
  && useradd -m -s /bin/bash -u 1002 mgarcia

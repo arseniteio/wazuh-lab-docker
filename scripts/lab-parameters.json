@@ -233,5 +233,31 @@
     "P-10": [
       "RFC-STD-1 | 2026-10-01 | * | Cambios estándar del laboratorio: parcheado y operación diaria | bajo | rsi | 2026-10-01 | 2026-10-01 00:00 | | aprobada | | bajo"
     ]
+  },
+  "op.exp.6": {
+    "P-01": [
+      "servidor | clamav | /var/log/clamav/clamav.log"
+    ],
+    "P-03": 48,
+    "P-04": [
+      "actualizacion_automatica_firmas | si",
+      "analisis_comprimidos | si",
+      "registro_syslog | si"
+    ],
+    "P-05": [
+      "correo | pasarela de correo con antimalware",
+      "dispositivos extraíbles | bloqueados por política"
+    ],
+    "P-06": 7,
+    "P-08": [
+      "python3 | /usr/bin/python3.12 | - | servidores"
+    ],
+    "P-09": [
+      "virustotal | no | sin clave de API en el laboratorio",
+      "yara | no |",
+      "rootcheck | si | todos los equipos",
+      "active_response | si | firewall-drop ante fuerza bruta SSH"
+    ],
+    "P-10": "bloqueados"
   }
 }

@@ -4,7 +4,7 @@
 #
 #   1. Creates the ens group the agent enrolls into.
 #   2. Installs the OSCompliance rules from $CORE_SRC/catalog/wazuh and, for the
-#      lab machine only, the auth.log localfile its sshd logins reach Wazuh by.
+#      lab machine only, the auth.log and syslog localfiles Wazuh reads it by.
 #   3. Creates the Wazuh API user the engine writes the group configuration
 #      with, holding only the role of catalog/wazuh/engine-api-role.json.
 #   The rest of the group configuration (facts, audit log, paths, services)
@@ -42,26 +42,28 @@ fi
 
 AGENT_CONF=/var/ossec/etc/shared/ens/agent.conf
 
-# Lab machine only: its auth.log (rsyslog) carries the sshd logins EV-03 reads.
-# A real machine keeps whatever authentication source Wazuh already reads.
-if docker exec "$MGR" grep -q "<location>/var/log/auth.log</location>" "$AGENT_CONF"; then
-  ok "localfile /var/log/auth.log already in the ens group"
-else
+# Lab machine only: its auth.log (rsyslog) carries the sshd logins op.acc.1 EV-03 reads, and its syslog
+# the ClamAV detections op.exp.6 EV-04 reads. A real machine keeps whatever Wazuh already reads.
+for log in /var/log/auth.log /var/log/syslog; do
+  if docker exec "$MGR" grep -q "<location>$log</location>" "$AGENT_CONF"; then
+    ok "localfile $log already in the ens group"
+    continue
+  fi
   tmp="$(mktemp)"
   docker exec "$MGR" cat "$AGENT_CONF" \
-  | python3 -c '
-import sys
+  | LOG="$log" python3 -c '
+import os, sys
 conf = sys.stdin.read()
 i = conf.index("</agent_config>", conf.index("<agent_config>"))
-sys.stdout.write(conf[:i] + "\n<localfile>\n  <log_format>syslog</log_format>\n  <location>/var/log/auth.log</location>\n</localfile>\n" + conf[i:])
+sys.stdout.write(conf[:i] + "\n<localfile>\n  <log_format>syslog</log_format>\n  <location>" + os.environ["LOG"] + "</location>\n</localfile>\n" + conf[i:])
 ' > "$tmp"
   docker cp -q "$tmp" "$MGR:$AGENT_CONF"
   rm -f "$tmp"
   docker exec "$MGR" chown wazuh:wazuh "$AGENT_CONF"
   docker exec "$MGR" chmod 660 "$AGENT_CONF"
   osc_changed=1
-  ok "localfile /var/log/auth.log added to the ens group"
-fi
+  ok "localfile $log added to the ens group"
+done
 
 docker exec "$MGR" /var/ossec/bin/wazuh-analysisd -t >/dev/null || die "manager configuration is not valid"
 if [ "$osc_changed" = 1 ]; then

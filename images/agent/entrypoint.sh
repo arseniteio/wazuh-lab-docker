@@ -44,6 +44,14 @@ SH
 chmod 755 /usr/local/bin/lab-portal
 echo "7 * * * * root /usr/local/bin/lab-portal" > /etc/cron.d/lab-portal
 
+# ClamAV for op.exp.6: signatures first, then the daemons, and a daily full scan logged where the agent
+# reads its summary.
+install -d -o clamav -g clamav /run/clamav
+[ -f /var/lib/clamav/daily.cvd ] || [ -f /var/lib/clamav/daily.cld ] || freshclam --quiet || true
+freshclam -d
+clamd
+echo '13 3 * * * root clamscan -r -i / --exclude-dir=^/proc --exclude-dir=^/sys --log=/var/log/clamav/scan.log >/dev/null 2>&1' > /etc/cron.d/lab-clamscan
+
 # A daily copy of /etc for op.exp.3 EV-09: the lab declares it in op.exp.3 P-07.
 install -d -m 700 /var/backups
 echo '41 2 * * * root tar czf /var/backups/lab-etc-$(date +\%F).tgz -C / etc 2>/dev/null' > /etc/cron.d/lab-backup
