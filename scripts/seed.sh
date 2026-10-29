@@ -4,8 +4,8 @@
 #
 #   1. First save of the `active` document, if missing, through the plugin
 #      API with the lab admin user.
-#   2. Seeds the controls in $CONTROLS with inject-control.py (it merges: it
-#      never overwrites values you already set).
+#   2. Seeds every control the plugin has a seed block for with
+#      inject-control.py (it merges: it never overwrites values you already set).
 #   3. Validates the document with the plugin's validate-configuration.ts.
 #
 # Idempotent: safe to repeat.
@@ -38,6 +38,7 @@ else
 fi
 
 step "Seeding controls"
+CONTROLS="$(ls "$PLUGIN_SRC"/config/*-control-block.json | sed -E 's#.*/##; s#-control-block.json##; s#-([0-9]+)$#.\1#; s#-#.#g')"
 for c in $CONTROLS; do
   OUT="$(docker run --rm --network "$NETWORK" \
     -v "$LAB_DIR/certs:/certs:ro" -v "$PLUGIN_SRC/config:/cfg:ro" \

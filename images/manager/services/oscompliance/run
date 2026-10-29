@@ -1,0 +1,31 @@
+#!/usr/bin/with-contenv sh
+# oscompliance-agent on the manager: one pass per hour and the sweep once a day.
+# The manager is in no group: it reads the paths the engine writes for the ens
+# group.
+AGENT=/opt/oscompliance/oscompliance-agent
+[ -x "$AGENT" ] || exec sleep infinity
+
+install -d -m 750 /etc/oscompliance
+[ -e /etc/oscompliance/agent.json ] || \
+  echo '{"paths": {"wazuh_shared_conf": "/var/ossec/etc/shared/ens/agent.conf", "wazuh_client_keys": ""}}' > /etc/oscompliance/agent.json
+
+sleep 60
+
+# One key-based sshd login, so the manager has an authentication event to judge.
+[ -f /root/.ssh/lab_login ] || {
+  install -d -m 700 /root/.ssh
+  ssh-keygen -q -t ed25519 -N "" -f /root/.ssh/lab_login
+  cat /root/.ssh/lab_login.pub >> /root/.ssh/authorized_keys
+}
+ssh -i /root/.ssh/lab_login -o BatchMode=yes -o StrictHostKeyChecking=no root@localhost true || echo "lab sshd login failed" >&2
+
+last_sweep=0
+while true; do
+  "$AGENT" || echo "oscompliance-agent failed" >&2
+  now=$(date +%s)
+  if [ $((now - last_sweep)) -ge 86400 ]; then
+    "$AGENT" -collect sweep || echo "oscompliance sweep failed" >&2
+    last_sweep=$now
+  fi
+  sleep 3600
+done

@@ -6,6 +6,13 @@
     "P-08": [
       "/etc/ssh | 755 | root:root",
       "/etc/sudoers.d | 750 | root:root"
+    ],
+    "P-03": "no",
+    "P-04": "Política de Control de Acceso del laboratorio v1.0, aprobada 01/09/2026",
+    "P-05": "Mínimo privilegio + sudo",
+    "P-07": "027",
+    "P-09": [
+      "jperez | admin | sudo:total"
     ]
   },
   "op.acc.3": {
@@ -16,23 +23,83 @@
     "P-04": [
       "cambio de privilegios | 2 | usermod | gpasswd"
     ],
-    "P-06": 30
+    "P-06": 30,
+    "P-01": [
+      "jperez | operacion",
+      "mgarcia | desarrollo"
+    ],
+    "P-05": [
+      "auditor1 | global"
+    ]
   },
   "op.acc.4": {
     "P-03": 180,
     "P-08": [
       "2026-09-15 | servidores del laboratorio | Responsable de Seguridad"
+    ],
+    "P-01": [
+      "admin | /etc | rw",
+      "ops | /var/log | r"
+    ],
+    "P-02": [
+      "rsec | global"
+    ],
+    "P-05": [
+      "jperez"
+    ],
+    "P-07": [
+      "/datos/rrhh | rrhh"
     ]
   },
   "op.acc.5": {
     "P-02": [
       "sede | lab-agent-01 | /var/log/lab-portal/auth.json"
-    ]
+    ],
+    "P-01": "R2",
+    "P-03": 5,
+    "P-04": "PR-07 Reactivación de credenciales v1.0",
+    "P-05": 90,
+    "P-06": 24,
+    "P-07": [
+      "FNMT-RCM | ocsp"
+    ],
+    "P-08": 365,
+    "P-09": "sí"
   },
   "op.acc.6": {
     "P-06": 24,
     "P-12": [
       "jperez | 2026-10-01 | baja"
+    ],
+    "P-01": "R1",
+    "P-02": [
+      "192.168.0.0/16",
+      "172.16.0.0/12",
+      "10.0.0.0/8"
+    ],
+    "P-04": 180,
+    "P-05": 5,
+    "P-09": 45,
+    "P-10": [
+      "longitud_minima | 12",
+      "clases_de_caracteres | 3",
+      "historial | 5",
+      "lista_de_bloqueo | 1"
     ]
+  },
+  "op.acc.1": {
+    "P-04": [
+      "admin",
+      "guest",
+      "test"
+    ],
+    "P-05": 1,
+    "P-06": 365,
+    "P-07": [
+      "jperez | lab-agent-01 | admin",
+      "mgarcia | lab-agent-01 | ops"
+    ],
+    "P-08": "no",
+    "P-12": ".adm"
   }
 }
