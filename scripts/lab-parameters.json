@@ -166,5 +166,40 @@
       "op.exp.3.5 | PR-17 Gestión de incidentes | https://intranet.lab.power-ens.local/docs/pr-17.pdf | 2026-09-01 | Responsable de Seguridad",
       "op.exp.3.r1.1 | Línea base de configuración del laboratorio v1 | https://intranet.lab.power-ens.local/docs/linea-base.pdf | 2026-09-01 | Responsable de Sistemas"
     ]
+  },
+  "op.exp.4": {
+    "P-01": [
+      "Crítica | 7",
+      "Alta | 30",
+      "Media | 90",
+      "Baja | 180",
+      "Sin puntuación |"
+    ],
+    "P-02": [
+      "root | laboratorio | administración",
+      "unattended-upgrades | laboratorio | parcheado automático",
+      "jperez | laboratorio | operación"
+    ],
+    "P-03": [
+      "ubuntu | Ubuntu Security Notices | RSS",
+      "canonical | Ubuntu Security Notices | RSS",
+      "debian | Debian Security Advisories | RSS",
+      "amazon | Amazon Linux Security Center | RSS",
+      "wazuh | Wazuh GitHub releases | correo"
+    ],
+    "P-04": [
+      "* | * 02:00-06:00; sab 22:00-02:00"
+    ],
+    "P-07": [
+      "* | lvm | snapshot previo al parcheo | 24"
+    ],
+    "P-08": [
+      "Crítica | 9.0",
+      "Alta | 7.0",
+      "Media | 4.0",
+      "Baja | 0.1"
+    ],
+    "P-10": 7,
+    "P-06": []
   }
 }
