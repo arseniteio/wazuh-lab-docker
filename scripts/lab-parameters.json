@@ -518,5 +518,54 @@
     "P-07": [
       "Personal TIC propio | horas_internas | partes de dedicación"
     ]
+  },
+  "op.cont.2": {
+    "P-01": [
+      "Plan de Continuidad del laboratorio | v1.0 | 2026-09-01 | Comité de Seguridad | Responsable de Seguridad"
+    ],
+    "P-02": [
+      "portal del laboratorio | 4 h | 1 h | lab-agent-01"
+    ],
+    "P-03": [
+      "coordinador de crisis | A. Martínez | J. Ruiz | activar el plan"
+    ],
+    "P-04": [
+      "CPD alternativo del laboratorio | Proveedor X | CT-2026-001 | 2027-09-01 | 48 h"
+    ],
+    "P-05": [
+      "A. Martínez | coordinación de crisis | 2026-09-10 | 2027-09-10",
+      "J. Ruiz | coordinación de crisis | 2026-09-10 | 2027-09-10"
+    ],
+    "P-06": [
+      "Plan de Emergencia del edificio"
+    ],
+    "P-07": [
+      "/etc",
+      "/boot"
+    ],
+    "P-08": 12,
+    "P-ATT": [
+      "op.cont.2.5 | Plan de Continuidad de Negocio | https://intranet.lab.power-ens.local/docs/pcn.pdf | 2026-09-01 | Responsable de Seguridad"
+    ]
+  },
+  "op.cont.3": {
+    "P-01": 12,
+    "P-02": [
+      "simulacro | conmutación al CPD alternativo | 12",
+      "escritorio | revisión del plan | 6"
+    ],
+    "P-03": [
+      "pérdida total de CPD | todos"
+    ],
+    "P-04": [
+      "2026-10-31T09:00:00Z | 2026-10-31T10:00:00Z | simulacro | pérdida total de CPD | lab-agent-01 | satisfactorio | 1 | INF-LAB-1",
+      "2026-10-15 | 2026-10-15 | escritorio | pérdida total de CPD | | satisfactorio | 0 | INF-LAB-0"
+    ],
+    "P-05": [
+      "D-LAB-1 | 2026-10-31 | Responsable de Sistemas | 2026-12-31 | abierta | | "
+    ],
+    "P-07": [
+      "lab-agent-01 | 4 | 15"
+    ]
   }
 }
