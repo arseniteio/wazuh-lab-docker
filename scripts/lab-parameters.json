@@ -810,5 +810,25 @@
       "mp.s.3.7 | Política de cookies | https://intranet.lab.power-ens.local/docs/cookies.pdf | 2026-09-01 | Responsable de Seguridad",
       "mp.s.3.r1.2 | Inspección TLS | https://intranet.lab.power-ens.local/docs/tls.pdf | 2026-09-01 | Responsable de Seguridad"
     ]
+  },
+  "mp.s.4": {
+    "P-01": [
+      "portal del laboratorio | lab-agent-01 | alta | 99,5 %"
+    ],
+    "P-02": 70,
+    "P-03": [
+      "denegación de servicio | fuerza bruta SSH masiva | sshd | 5763"
+    ],
+    "P-04": [
+      "limitación de tasa | proxy inverso | portal del laboratorio"
+    ],
+    "P-05": "PR-25 Reacción ante DoS",
+    "P-06": "NOC del operador 24x7",
+    "P-07": [
+      "2026-10-02T10:00:00+02:00 | 2026-10-02T11:00:00+02:00 | portal del laboratorio | inundación HTTP | alto | bloqueo de rangos | ticket NOC-123"
+    ],
+    "P-09": [
+      "portal del laboratorio | 50 peticiones/s | 400 peticiones/s"
+    ]
   }
 }
