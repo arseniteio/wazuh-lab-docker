@@ -722,5 +722,28 @@
     "P-ATT": [
       "mp.eq.4.r1.1 | Relación de productos del CCN-STIC 105 | https://intranet.lab.power-ens.local/docs/stic-105.pdf | 2026-09-01 | Responsable de Seguridad"
     ]
+  },
+  "mp.s.1": {
+    "P-01": [
+      "Postfix del laboratorio | lab-agent-01 | lab-agent-01"
+    ],
+    "P-02": [
+      "google.com | 20230601 | reject"
+    ],
+    "P-03": [
+      "antispam | spam detectado por Postfix | postfix | 3355-3357",
+      "antimalware | virus en anexo | clamd | 52502",
+      "código móvil | anexo con macros | amavis | 52502"
+    ],
+    "P-04": "TLS 1.2 o superior entrante y saliente",
+    "P-06": "NT-02 Uso del correo electrónico",
+    "P-07": [
+      "2026-09-15 | campaña de phishing simulado | toda la plantilla | 87 %"
+    ],
+    "P-08": 365,
+    "P-10": 4,
+    "P-ATT": [
+      "mp.s.1.6 | NT-02 Uso del correo electrónico | https://intranet.lab.power-ens.local/docs/nt-02.pdf | 2026-09-01 | Responsable de Seguridad"
+    ]
   }
 }
