@@ -411,5 +411,25 @@
     ],
     "P-07": "PR-20 Ciclo de vida de las claves del laboratorio",
     "P-10": 30
+  },
+  "mp.info.6": {
+    "P-01": 24,
+    "P-02": 2,
+    "P-03": 1,
+    "P-04": [
+      "configuración | /var/backups/lab-etc-*.tgz | | "
+    ],
+    "P-05": 90,
+    "P-06": [
+      "2026-10-25 | lab-agent-01 | configuración | correcta | tar tzf y comparación de /etc/hostname"
+    ],
+    "P-07": [
+      "root"
+    ],
+    "P-09": "NAS del laboratorio",
+    "P-10": "rsync",
+    "P-ATT": [
+      "mp.info.6.2.c | PR-20 Copias de seguridad del laboratorio | https://intranet.lab.power-ens.local/docs/pr-20.pdf | 2026-09-01 | Responsable de Sistemas"
+    ]
   }
 }
