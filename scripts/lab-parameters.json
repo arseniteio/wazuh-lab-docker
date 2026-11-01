@@ -830,5 +830,25 @@
     "P-09": [
       "portal del laboratorio | 50 peticiones/s | 400 peticiones/s"
     ]
+  },
+  "mp.sw.2": {
+    "P-01": [
+      "portal del laboratorio | lab-agent-01 | tree, clamav | J. Ruiz | desarrollo propio"
+    ],
+    "P-02": [
+      "sin vulnerabilidades críticas",
+      "TLS 1.2 o superior"
+    ],
+    "P-03": [
+      "lab-agent-01 | wazuh.manager | red de Docker separada"
+    ],
+    "P-04": 7,
+    "P-05": [
+      "* | 22 | ssh",
+      "portal del laboratorio | 3310 | clamd"
+    ],
+    "P-06": [
+      "2026-10-01 | portal del laboratorio | | aceptada | Responsable de Seguridad"
+    ]
   }
 }
