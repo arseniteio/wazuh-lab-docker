@@ -745,5 +745,36 @@
     "P-ATT": [
       "mp.s.1.6 | NT-02 Uso del correo electrónico | https://intranet.lab.power-ens.local/docs/nt-02.pdf | 2026-09-01 | Responsable de Seguridad"
     ]
+  },
+  "mp.s.2": {
+    "P-01": [
+      "portal del laboratorio | lab-agent-01 | lab-agent-01 | https://portal.lab.power-ens.local | interna"
+    ],
+    "P-03": [
+      "acceso sin autenticación | acceso a /admin sin sesión | nginx | 31101",
+      "vía alternativa | listado de directorios | nginx | 31104",
+      "manipulación de URL | recorrido de rutas | nginx | 31104",
+      "manipulación de cookies | cookie alterada | nginx | 31105",
+      "inyección | SQL en parámetros | nginx | 31103, 31152",
+      "escalado de privilegios | acceso a funciones de administración | nginx | 31151",
+      "XSS | script en parámetros | nginx | 31105, 31154"
+    ],
+    "P-06": "PR-22 Auditoría de aplicaciones web",
+    "P-07": "caja blanca",
+    "P-08": [
+      "2026-06-20 | portal del laboratorio | caja blanca | OWASP ASVS | SonarQube, ZAP | 2"
+    ],
+    "P-09": 30,
+    "P-10": 365,
+    "P-11": 4,
+    "P-12": [
+      "cookie sin Secure | portal del laboratorio | media | equipo web | 2026-07-31 | resuelto"
+    ],
+    "P-13": [
+      "sin proxies ni cachés | | "
+    ],
+    "P-ATT": [
+      "mp.s.2.r3.1 | Arquitectura del portal sin proxies | https://intranet.lab.power-ens.local/docs/portal.pdf | 2026-09-01 | Responsable de Sistemas"
+    ]
   }
 }
