@@ -431,5 +431,34 @@
     "P-ATT": [
       "mp.info.6.2.c | PR-20 Copias de seguridad del laboratorio | https://intranet.lab.power-ens.local/docs/pr-20.pdf | 2026-09-01 | Responsable de Sistemas"
     ]
+  },
+  "op.mon.1": {
+    "P-01": [
+      "no | | el laboratorio no tiene segmentos de red propios"
+    ],
+    "P-02": [
+      "wazuh | reglas oficiales de Wazuh | 3000",
+      "propias | reglas de OSCompliance | 1"
+    ],
+    "P-03": [
+      "acceso no autorizado por SSH | servidores Linux | 5710, 5712, 5716, 5720",
+      "escalada con sudo | servidores Linux | 5401-5405",
+      "malware detectado | servidores Linux | 52502"
+    ],
+    "P-04": [
+      "intrusión en servidor | PR-18 Respuesta a intrusión | Responsable de Seguridad"
+    ],
+    "P-05": [
+      "0215-policy_rules.xml | exclusión de fábrica de Wazuh | Responsable de Seguridad"
+    ],
+    "P-06": [
+      "firewall-drop | 5763 | agente | 600"
+    ],
+    "P-07": 180,
+    "P-08": 7,
+    "P-09": 2,
+    "P-ATT": [
+      "op.mon.1.r2.1 | PR-18 Respuesta a intrusión | https://intranet.lab.power-ens.local/docs/pr-18.pdf | 2026-09-01 | Responsable de Seguridad"
+    ]
   }
 }
