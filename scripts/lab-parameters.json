@@ -695,5 +695,32 @@
       "mp.eq.3.3 | Perfil de acceso remoto | https://intranet.lab.power-ens.local/docs/acceso-remoto.pdf | 2026-09-01 | Responsable de Seguridad",
       "mp.eq.3.r2.1 | NT-04 Uso de dispositivos portátiles | https://intranet.lab.power-ens.local/docs/nt-04.pdf | 2026-09-01 | Responsable de Seguridad"
     ]
+  },
+  "mp.eq.4": {
+    "P-01": [
+      "pasarela de Docker | encaminador | 192.168.167.1 | | Sistemas | no",
+      "impresora del laboratorio | multifunción | 192.168.167.50 | | Administración | sí"
+    ],
+    "P-02": [
+      "multifunción | 192.168.167.0/24 | tcp | 9100"
+    ],
+    "P-03": [
+      "cortafuegos del laboratorio | cortafuegos | wazuh.manager"
+    ],
+    "P-04": [
+      "pasarela de Docker | syslog | wazuh.manager"
+    ],
+    "P-05": [
+      "impresora del laboratorio | disco de 64 GB | sobrescritura | en la retirada"
+    ],
+    "P-06": 24,
+    "P-07": [
+      "impresora del laboratorio | sin certificar | sin producto equivalente"
+    ],
+    "P-08": "sin dispositivos de invitados",
+    "P-09": "control manual de puertos",
+    "P-ATT": [
+      "mp.eq.4.r1.1 | Relación de productos del CCN-STIC 105 | https://intranet.lab.power-ens.local/docs/stic-105.pdf | 2026-09-01 | Responsable de Seguridad"
+    ]
   }
 }
