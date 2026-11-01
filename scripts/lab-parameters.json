@@ -653,7 +653,7 @@
       "usuarios | servicios | tcp | 443",
       "administración | * | * | *"
     ],
-    "P-03": "VLAN",
+    "P-03": "VPN",
     "P-04": [
       "sin red inalámbrica | | "
     ],
