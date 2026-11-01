@@ -494,5 +494,29 @@
       "op.mon.3.r3.1 | Informe de líneas base del laboratorio | https://intranet.lab.power-ens.local/docs/lineas-base.pdf | 2026-09-01 | Responsable de Seguridad",
       "op.mon.3.r4.1 | Contrato de cibervigilancia 2026 | https://intranet.lab.power-ens.local/docs/cibervigilancia.pdf | 2026-09-01 | Responsable de Seguridad"
     ]
+  },
+  "op.mon.2": {
+    "P-01": [
+      "op.acc.1 | sí | MEDIO | ",
+      "mp.info.6 | sí | MEDIO | R1"
+    ],
+    "P-02": 90,
+    "P-03": 15,
+    "P-04": [
+      "incidentes_por_severidad",
+      "tiempo_medio_resolucion",
+      "notificados_ccn_cert"
+    ],
+    "P-05": [
+      "Responsable de Seguridad | RSEG | metricas",
+      "Responsable de Sistemas | RSIS | recursos"
+    ],
+    "P-06": [
+      "2026-10-10 | 2026-T3 | 72 | Responsable de Seguridad | | | ",
+      "2026-10-12 | 2026-T3 | | Responsable de Sistemas | 120 | 40 | 9000"
+    ],
+    "P-07": [
+      "Personal TIC propio | horas_internas | partes de dedicación"
+    ]
   }
 }
