@@ -600,5 +600,26 @@
       "op.nub.1.r1.2 | Informe op.pl.5 del SIEM | https://intranet.lab.power-ens.local/docs/op-pl-5.pdf | 2026-09-01 | Responsable de Seguridad",
       "op.nub.1.r2.1 | Bastionado M365 según CCN-STIC-885 | https://intranet.lab.power-ens.local/docs/m365.pdf | 2026-09-01 | Responsable de Sistemas"
     ]
+  },
+  "mp.com.1": {
+    "P-01": [
+      "cortafuegos del laboratorio | cortafuegos | red de Docker | wazuh.manager"
+    ],
+    "P-02": [
+      "192.168.167.0/24 | 192.168.167.0/24 | * | * | Responsable de Seguridad | 2026-09-01",
+      "* | 192.168.167.0/24 | tcp | 8443 | Responsable de Seguridad | 2026-09-01"
+    ],
+    "P-03": [
+      "red de Docker | cortafuegos del laboratorio | 192.168.167.1"
+    ],
+    "P-04": 180,
+    "P-05": [
+      "RDP o SSH expuestos a internet"
+    ],
+    "P-06": "ITS de Interconexión de Sistemas de Información",
+    "P-10": 4,
+    "P-11": [
+      "2026-09-01 | cortafuegos del laboratorio | Responsable de Seguridad | sin hallazgos"
+    ]
   }
 }
