@@ -460,5 +460,39 @@
     "P-ATT": [
       "op.mon.1.r2.1 | PR-18 Respuesta a intrusión | https://intranet.lab.power-ens.local/docs/pr-18.pdf | 2026-09-01 | Responsable de Seguridad"
     ]
+  },
+  "op.mon.3": {
+    "P-01": [
+      "autenticación | lab-agent-01 | /var/log/auth.log | 24",
+      "autenticación del manager | wazuh.manager | /var/log/secure | 48"
+    ],
+    "P-02": [
+      "wazuh | 100"
+    ],
+    "P-03": 2,
+    "P-04": [
+      "accesos fuera de horario | 7-20 h | cualquier acceso a otra hora"
+    ],
+    "P-06": [
+      "cibervigilancia del laboratorio | Proveedor S.L. | dominios similares"
+    ],
+    "P-07": [
+      "portal del laboratorio | externo | 8 intentos | 2 min | 5712"
+    ],
+    "P-08": [
+      "Responsable de Seguridad | correo | 12"
+    ],
+    "P-09": [
+      "configuración | 90 | interno",
+      "vulnerabilidades | 30 | interno",
+      "pentest | 365 | externo"
+    ],
+    "P-10": [
+      "2026-06-15 | pentest | perímetro del laboratorio | Auditora S.L. | 2 | corregido"
+    ],
+    "P-ATT": [
+      "op.mon.3.r3.1 | Informe de líneas base del laboratorio | https://intranet.lab.power-ens.local/docs/lineas-base.pdf | 2026-09-01 | Responsable de Seguridad",
+      "op.mon.3.r4.1 | Contrato de cibervigilancia 2026 | https://intranet.lab.power-ens.local/docs/cibervigilancia.pdf | 2026-09-01 | Responsable de Seguridad"
+    ]
   }
 }
