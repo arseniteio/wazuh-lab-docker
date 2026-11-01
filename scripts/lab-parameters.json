@@ -776,5 +776,39 @@
     "P-ATT": [
       "mp.s.2.r3.1 | Arquitectura del portal sin proxies | https://intranet.lab.power-ens.local/docs/portal.pdf | 2026-09-01 | Responsable de Sistemas"
     ]
+  },
+  "mp.s.3": {
+    "P-01": "NT-05 Uso de la navegación web",
+    "P-02": [
+      "proxy del laboratorio | wazuh.manager | wazuh.manager"
+    ],
+    "P-03": [
+      "categorías | categoría bloqueada | squid | 5401",
+      "descargas y contenido activo | ejecutable descargado | clamd | 52502",
+      "reputación | destino en lista de IOC | cdb | 5712",
+      "lista negra | destino vetado | squid | 5712",
+      "evasión | túnel DNS | dns | 5712"
+    ],
+    "P-04": [
+      "127.0.0.11",
+      "192.168.167.0/24"
+    ],
+    "P-05": "perfiles separados de uso personal y corporativo",
+    "P-06": [
+      "2026-09-20 | sesión sobre descargas | toda la plantilla | 80 %"
+    ],
+    "P-07": [
+      "2026-05-20 | A. Martínez | respuesta a incidentes"
+    ],
+    "P-08": 365,
+    "P-09": 365,
+    "P-10": 730,
+    "P-11": "inspección TLS salvo banca y sanidad; 30 días",
+    "P-12": 4,
+    "P-ATT": [
+      "mp.s.3.1 | NT-05 Uso de la navegación web | https://intranet.lab.power-ens.local/docs/nt-05.pdf | 2026-09-01 | Responsable de Seguridad",
+      "mp.s.3.7 | Política de cookies | https://intranet.lab.power-ens.local/docs/cookies.pdf | 2026-09-01 | Responsable de Seguridad",
+      "mp.s.3.r1.2 | Inspección TLS | https://intranet.lab.power-ens.local/docs/tls.pdf | 2026-09-01 | Responsable de Seguridad"
+    ]
   }
 }
