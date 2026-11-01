@@ -567,5 +567,38 @@
     "P-07": [
       "lab-agent-01 | 4 | 15"
     ]
+  },
+  "op.nub.1": {
+    "P-01": "usuario",
+    "P-02": [
+      "M365 | SaaS | Microsoft | correo y documentos | alta | utilizado"
+    ],
+    "P-03": [
+      "M365 | ENS ALTA | Microsoft 365 | 2027-06-30 | declaración de conformidad 2026"
+    ],
+    "P-04": [
+      "M365 | Common Criteria | CCN-2026-001 | 2027-03-31"
+    ],
+    "P-06": [
+      "M365 | office365 | inquilino del laboratorio"
+    ],
+    "P-08": [
+      "M365 | UE (Irlanda) | UE | RGPD"
+    ],
+    "P-09": [
+      "M365 | AES-256 | claves del proveedor"
+    ],
+    "P-10": [
+      "M365 | resumen ejecutivo 2026 | 2026-02-15 | plataforma"
+    ],
+    "P-11": [
+      "M365 | admin@lab.power-ens.local"
+    ],
+    "P-12": 12,
+    "P-13": 24,
+    "P-ATT": [
+      "op.nub.1.r1.2 | Informe op.pl.5 del SIEM | https://intranet.lab.power-ens.local/docs/op-pl-5.pdf | 2026-09-01 | Responsable de Seguridad",
+      "op.nub.1.r2.1 | Bastionado M365 según CCN-STIC-885 | https://intranet.lab.power-ens.local/docs/m365.pdf | 2026-09-01 | Responsable de Sistemas"
+    ]
   }
 }
