@@ -668,5 +668,12 @@
       "2026-09-01 | Responsable de Seguridad | sin cambios"
     ],
     "P-09": 4
+  },
+  "mp.eq.2": {
+    "P-01": 15,
+    "P-02": 60,
+    "P-04": [
+      "pantalla-soc01 | visualización continua | sala con control de acceso | Responsable de Seguridad"
+    ]
   }
 }
