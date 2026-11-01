@@ -621,5 +621,26 @@
     "P-11": [
       "2026-09-01 | cortafuegos del laboratorio | Responsable de Seguridad | sin hallazgos"
     ]
+  },
+  "mp.com.3": {
+    "P-01": [
+      "portal del laboratorio | usuarios externos | contraseña y TLS | internet"
+    ],
+    "P-02": [
+      "alteración | firma de evento inválida | auditd | 80700-80799",
+      "inyección | ARP incoherente | arpwatch | 7201",
+      "secuestro | inicio de sesión desde dos IP | sshd | 5715"
+    ],
+    "P-03": "PR-18 Respuesta a intrusión",
+    "P-04": [
+      "certificado cualificado | Reglamento eIDAS"
+    ],
+    "P-07": [
+      "Wazuh manager | Common Criteria EAL2 | CCN-LAB-1 | 2028-01-31"
+    ],
+    "P-ATT": [
+      "mp.com.3.3 | Política de identificación electrónica | https://intranet.lab.power-ens.local/docs/eidas.pdf | 2026-09-01 | Responsable de Seguridad",
+      "mp.com.3.r3.1 | Diseño de la VPN del laboratorio | https://intranet.lab.power-ens.local/docs/vpn.pdf | 2026-09-01 | Responsable de Sistemas"
+    ]
   }
 }
