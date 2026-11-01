@@ -674,6 +674,7 @@
     "P-02": 60,
     "P-04": [
       "pantalla-soc01 | visualización continua | sala con control de acceso | Responsable de Seguridad"
-    ]
+    ],
+    "P-03": true
   }
 }
