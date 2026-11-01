@@ -676,5 +676,24 @@
       "pantalla-soc01 | visualización continua | sala con control de acceso | Responsable de Seguridad"
     ],
     "P-03": true
+  },
+  "mp.eq.3": {
+    "P-01": [
+      "lab-agent-01 | portátil de laboratorio | J. Gómez | MEDIO"
+    ],
+    "P-02": 90,
+    "P-03": "PR-09 Pérdida de dispositivos",
+    "P-04": [
+      "correo e intranet | usuario estándar | Responsable de Seguridad | 2026-09-01"
+    ],
+    "P-07": "NT-04 Uso de dispositivos portátiles",
+    "P-08": 4,
+    "P-09": [
+      "2026-10-15 | lab-agent-01 | J. Gómez | en su poder"
+    ],
+    "P-ATT": [
+      "mp.eq.3.3 | Perfil de acceso remoto | https://intranet.lab.power-ens.local/docs/acceso-remoto.pdf | 2026-09-01 | Responsable de Seguridad",
+      "mp.eq.3.r2.1 | NT-04 Uso de dispositivos portátiles | https://intranet.lab.power-ens.local/docs/nt-04.pdf | 2026-09-01 | Responsable de Seguridad"
+    ]
   }
 }
