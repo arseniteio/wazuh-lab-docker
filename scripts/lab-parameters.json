@@ -642,5 +642,31 @@
       "mp.com.3.3 | Política de identificación electrónica | https://intranet.lab.power-ens.local/docs/eidas.pdf | 2026-09-01 | Responsable de Seguridad",
       "mp.com.3.r3.1 | Diseño de la VPN del laboratorio | https://intranet.lab.power-ens.local/docs/vpn.pdf | 2026-09-01 | Responsable de Sistemas"
     ]
+  },
+  "mp.com.4": {
+    "P-01": [
+      "servicios | servicios | 192.168.167.0/24 | 167",
+      "usuarios | usuarios | 10.1.0.0/16 | 10",
+      "administración | administración | 10.9.0.0/24 | 9"
+    ],
+    "P-02": [
+      "usuarios | servicios | tcp | 443",
+      "administración | * | * | *"
+    ],
+    "P-03": "VLAN",
+    "P-04": [
+      "sin red inalámbrica | | "
+    ],
+    "P-05": [
+      "IC-01 | usuarios ↔ servicios | wazuh.manager | wazuh.manager"
+    ],
+    "P-06": [
+      "administración | 802.1X | grupo de administradores"
+    ],
+    "P-07": 180,
+    "P-08": [
+      "2026-09-01 | Responsable de Seguridad | sin cambios"
+    ],
+    "P-09": 4
   }
 }
