@@ -51,7 +51,6 @@ overrides go in `lab.conf.local` (not versioned).
 | `WAZUH_VERSION` | `4.14.7` | Wazuh images and agent package |
 | `PLUGIN_SRC` | plugin repository path | Plugin source, mounted read-only |
 | `CORE_SRC` | `oscompliance-ens` path | Agent source and manager rules (`catalog/wazuh/`) |
-| `CONTROLS` | 23 active controls | Controls seeded into the configuration |
 | `DASHBOARD_PORT` | `8443` | Dashboard port on `127.0.0.1` |
 
 ## `make up` sequence
@@ -82,8 +81,10 @@ lab.conf             lab settings
 
 ## Design
 
-- Based on the official wazuh-docker v4.14.7 single-node deployment. Changes are
-  listed at the top of `docker-compose.yml`.
+- Based on the official wazuh-docker v4.14.7 single-node deployment, with three
+  changes: the dashboard and the manager use the images in `images/`, only the
+  dashboard is published, and an `agent-01` service runs Ubuntu with wazuh-agent
+  and `oscompliance-agent`.
 - Only the dashboard is published, on `127.0.0.1`. The lab coexists with other
   Wazuh deployments on the same host.
 - The plugin is installed from its zip, as in a customer deployment.
@@ -95,7 +96,6 @@ lab.conf             lab settings
   reach it through the `ens` group `agent.conf`, which the engine writes from
   the ENS configuration through the Wazuh API (`-sync-apply`). Lab parameter
   values: `scripts/lab-parameters.json`.
-- Each step is a standalone script, reusable as a CI job.
 
 ## Known issues
 
@@ -110,7 +110,4 @@ lab.conf             lab settings
 
 ## Limitations
 
-- The manager sends no facts yet: its op.acc rows come out not evidenced.
 - One agent.
-- op.acc.1.5 and op.acc.1.r1.1 have no catalog evidence in plugin 1.4.0 and
-  never pass.
