@@ -1,7 +1,3 @@
-// Prints the document the Configuration screen saves the first time
-// (the plugin's defaultENSConfigurationTemplate), ready for the first-save PUT.
-// This way the lab does not need that click in the browser. The scope is the ens
-// group: the engine configures the Wazuh groups of the scope.
 import { defaultENSConfigurationTemplate } from '/w/common/ens/configuration/data/default-configuration';
 
 process.stdout.write(

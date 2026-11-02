@@ -1,7 +1,4 @@
 #!/usr/bin/with-contenv sh
-# oscompliance-agent on the manager: one pass per hour and the sweep once a day.
-# The manager is in no group: it reads the paths the engine writes for the ens
-# group.
 AGENT=/opt/oscompliance/oscompliance-agent
 [ -x "$AGENT" ] || exec sleep infinity
 
@@ -11,7 +8,6 @@ install -d -m 750 /etc/oscompliance
 
 sleep 60
 
-# One key-based sshd login, so the manager has an authentication event to judge.
 [ -f /root/.ssh/lab_login ] || {
   install -d -m 700 /root/.ssh
   ssh-keygen -q -t ed25519 -N "" -f /root/.ssh/lab_login
@@ -24,7 +20,6 @@ while true; do
   "$AGENT" || echo "oscompliance-agent failed" >&2
   now=$(date +%s)
   if [ $((now - last_sweep)) -ge 86400 ]; then
-    # The daily copy of /etc that op.exp.3 P-07 declares for the lab.
     install -d -m 700 /var/backups
     tar czf "/var/backups/lab-etc-$(date +%F).tgz" -C / etc 2>/dev/null || echo "lab /etc copy failed" >&2
     "$AGENT" -collect sweep || echo "oscompliance sweep failed" >&2

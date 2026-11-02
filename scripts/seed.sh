@@ -1,20 +1,7 @@
 #!/usr/bin/env bash
-###############################################################################
-# seed.sh · leaves the Power ENS configuration ready (plugin guide 06 §6, §8, §9).
-#
-#   1. First save of the `active` document, if missing, through the plugin
-#      API with the lab admin user.
-#   2. Seeds every control the plugin has a seed block for with
-#      inject-control.py (it merges: it never overwrites values you already set).
-#   3. Validates the document with the plugin's validate-configuration.ts.
-#
-# Idempotent: safe to repeat.
-###############################################################################
 set -euo pipefail
 . "$(dirname "$0")/lib.sh"
 
-# Node container with the plugin source read-only and its dependencies in a
-# volume of its own (your Mac's node_modules is never touched).
 node_plugin() {
   docker run --rm -v "$PLUGIN_SRC:/w:ro" -v "${COMPOSE_PROJECT_NAME}_node_modules:/w/node_modules" \
     -v "${COMPOSE_PROJECT_NAME}_npm_cache:/root/.npm" -v "$LAB_DIR/scripts:/lab:ro" -w /w "$@"

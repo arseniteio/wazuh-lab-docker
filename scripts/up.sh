@@ -1,20 +1,4 @@
 #!/usr/bin/env bash
-###############################################################################
-# up.sh · brings the whole lab up, from scratch or on top of a running one.
-#
-#   make up        (or bash scripts/up.sh)
-#
-# Steps, each one checked before moving on:
-#   1. lab certificates               scripts/certs.sh
-#   2. Power ENS zip, OSCompliance     build/ (zip built if missing)
-#   3. indexer, manager, dashboard    docker compose up
-#   4. dashboard, manager, indexer    scripts/dashboard-setup.sh, manager-setup.sh,
-#                                     indexer-setup.sh
-#   5. plugin configuration           scripts/seed.sh
-#   6. oscompliance-engine            engine service (it writes the ens
-#                                     group configuration the agent needs)
-#   7. agent running oscompliance     agent-01 service
-###############################################################################
 set -euo pipefail
 . "$(dirname "$0")/lib.sh"
 
@@ -29,7 +13,6 @@ else
 fi
 cp "$ZIP" "$LAB_DIR/images/dashboard/power-ens-2.19.5.zip"
 
-# Always rebuilt: it takes seconds and the lab must run the current code.
 bash "$LAB_DIR/scripts/build-core.sh"
 
 step "Building images and starting Wazuh $WAZUH_VERSION"
@@ -47,7 +30,6 @@ bash "$LAB_DIR/scripts/indexer-setup.sh"
 bash "$LAB_DIR/scripts/seed.sh"
 
 step "Starting the OSCompliance engine"
-# Recreated so it always runs the binary just built.
 "${COMPOSE[@]}" up -d --force-recreate engine
 wait_for "ens group configuration written by the engine" 300 \
   docker exec "$MGR" grep -q "oscompliance begin" /var/ossec/etc/shared/ens/agent.conf

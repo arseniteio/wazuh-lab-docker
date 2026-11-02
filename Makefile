@@ -1,25 +1,22 @@
-# Power ENS lab. Each target only calls a script in scripts/, so the same steps
-# work by hand, in GitLab CI or in GitHub Actions.
-
 .PHONY: up down status seed manager build-plugin logs
 
-up:            ## bring everything up (Wazuh, Power ENS, engine and agent)
+up:
 	@bash scripts/up.sh
 
-down:          ## destroy the lab containers, volumes and certificates
+down:
 	@bash scripts/down.sh
 
-status:        ## containers, agents and incoming facts
+status:
 	@bash scripts/status.sh
 
-seed:          ## repeat seeding and validation of the configuration
+seed:
 	@bash scripts/seed.sh
 
-manager:       ## reinstall the manager side of OSCompliance
+manager:
 	@bash scripts/manager-setup.sh
 
-build-plugin:  ## rebuild the zip from PLUGIN_SRC
+build-plugin:
 	@bash scripts/build-plugin.sh
 
-logs:          ## follow a service log: make logs S=agent-01
+logs:
 	@bash -c '. scripts/lib.sh; "$${COMPOSE[@]}" logs -f $(S)'

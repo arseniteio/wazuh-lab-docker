@@ -1,13 +1,4 @@
 #!/usr/bin/env bash
-###############################################################################
-# indexer-setup.sh · lab-only retention and backups of the alerts indices.
-#
-#   1. An ISM policy that deletes wazuh-alerts-* at 400 days (op.exp.8 EV-07).
-#   2. A filesystem snapshot repository, a daily snapshot policy and a first
-#      snapshot (op.exp.8 EV-09).
-#
-# Idempotent.
-###############################################################################
 set -euo pipefail
 . "$(dirname "$0")/lib.sh"
 

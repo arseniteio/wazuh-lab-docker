@@ -1,17 +1,4 @@
 #!/usr/bin/env bash
-###############################################################################
-# manager-setup.sh · installs the manager side of OSCompliance.
-#
-#   1. Creates the ens group the agent enrolls into.
-#   2. Installs the OSCompliance rules from $CORE_SRC/catalog/wazuh and, for the
-#      lab machine only, the auth.log and syslog localfiles Wazuh reads it by.
-#   3. Creates the Wazuh API user the engine writes the group configuration
-#      with, holding only the role of catalog/wazuh/engine-api-role.json.
-#   The rest of the group configuration (facts, audit log, paths, services)
-#   is written by the engine from the ENS configuration.
-#
-# Idempotent: nothing restarts when nothing changed.
-###############################################################################
 set -euo pipefail
 . "$(dirname "$0")/lib.sh"
 
@@ -22,7 +9,6 @@ else
   docker exec "$MGR" /var/ossec/bin/agent_groups -a -g ens -q >/dev/null
   ok "ens group created"
 fi
-
 
 step "OSCompliance rules on the manager"
 OSC_WAZUH="$CORE_SRC/catalog/wazuh"
@@ -42,8 +28,6 @@ fi
 
 AGENT_CONF=/var/ossec/etc/shared/ens/agent.conf
 
-# Lab machine only: its auth.log (rsyslog) carries the sshd logins op.acc.1 EV-03 reads, and its syslog
-# the ClamAV detections op.exp.6 EV-04 reads. A real machine keeps whatever Wazuh already reads.
 for log in /var/log/auth.log /var/log/syslog; do
   if docker exec "$MGR" grep -q "<location>$log</location>" "$AGENT_CONF"; then
     ok "localfile $log already in the ens group"
@@ -90,8 +74,6 @@ role_name="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["ro
 policy_body="$(python3 -c 'import json,sys; print(json.dumps(json.load(open(sys.argv[1]))["policy"]))' "$ROLE_FILE")"
 policy_name="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["policy"]["name"])' "$ROLE_FILE")"
 
-# The policy follows the role file: created the first time, rewritten after, so new actions reach a lab
-# that already has the user.
 policy_id="$(api GET "/security/policies?search=$policy_name" | id_of)"
 if [ -n "$policy_id" ]; then
   printf '%s' "$policy_body" | api PUT "/security/policies/$policy_id" --data-binary @- >/dev/null

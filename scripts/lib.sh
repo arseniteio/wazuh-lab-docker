@@ -1,14 +1,8 @@
-# lib.sh · shared functions and variables for the lab scripts.
-# Sourced with `. scripts/lib.sh`; never run on its own.
-
 LAB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Lab settings (paths to your code, versions, ports). lab.conf.local, if it
-# exists, overrides them without touching the versioned file.
 . "$LAB_DIR/lab.conf"
 [ -f "$LAB_DIR/lab.conf.local" ] && . "$LAB_DIR/lab.conf.local"
 
-# docker-compose.yml reads these variables from the environment.
 export COMPOSE_PROJECT_NAME WAZUH_VERSION DASHBOARD_PORT \
        INDEXER_PASSWORD API_PASSWORD ENGINE_API_USER ENGINE_API_PASSWORD CORE_SRC
 POWER_ENS_VERSION="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' \
@@ -25,10 +19,6 @@ die()  { printf '\033[31m  ERROR: %s\033[0m\n' "$*" >&2; exit 1; }
 
 plugin_version() { echo "$POWER_ENS_VERSION"; }
 
-# ix <path> [curl options]: request to the indexer with the admin certificate,
-# from a container on the lab network (the indexer certificate is only valid
-# for the name wazuh.indexer). Same as the `ix` function in plugin guide 06
-# §2.4, but with an image that already ships curl.
 ix() {
   docker run --rm -i --network "$NETWORK" -v "$LAB_DIR/certs:/certs:ro" \
     curlimages/curl:8.10.1 -s --cacert /certs/root-ca.pem \
@@ -36,7 +26,6 @@ ix() {
     "https://wazuh.indexer:9200/$1" "${@:2}"
 }
 
-# wait_for <description> <seconds> <command...>: retries the command until it succeeds.
 wait_for() {
   local desc="$1" max="$2"; shift 2
   local t=0

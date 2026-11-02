@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-###############################################################################
-# status.sh · snapshot of the lab: containers, agents and incoming facts.
-###############################################################################
 set -uo pipefail
 . "$(dirname "$0")/lib.sh"
 

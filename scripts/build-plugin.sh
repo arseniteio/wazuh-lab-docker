@@ -1,14 +1,4 @@
 #!/usr/bin/env bash
-###############################################################################
-# build-plugin.sh · builds the Power ENS zip from the plugin source.
-#
-#   scripts/build-plugin.sh
-#
-# Uses the power-ens-osd-builder:2.19.5 image (an OSD 2.19.5 tree already
-# prepared with `yarn osd bootstrap`, see ci/osd-builder.Dockerfile in the
-# plugin). The source is mounted read-only: the build never writes to your repo.
-# Leaves the zip at build/power-ens-<version>-osd-2.19.5.zip.
-###############################################################################
 set -euo pipefail
 . "$(dirname "$0")/lib.sh"
 
