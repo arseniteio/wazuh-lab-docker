@@ -5,5 +5,5 @@ COPY --chown=wazuh-dashboard:wazuh-dashboard power-ens-2.19.5.zip /tmp/power-ens
 RUN /usr/share/wazuh-dashboard/bin/opensearch-dashboards-plugin install file:///tmp/power-ens-2.19.5.zip \
  && rm /tmp/power-ens-2.19.5.zip
 USER root
-RUN python3 -c "import json,sys; f='/usr/share/wazuh-dashboard/package.json'; p=json.load(open(f)); v=[int(x) for x in sys.argv[1].split('.')]; p['build']['number']=str(int(p['build']['number'])+v[0]*10000+v[1]*100+v[2]); json.dump(p, open(f,'w'), indent=2); print('build.number', p['build']['number'])" "$POWER_ENS_VERSION"
+RUN python3 -c "import json,time; f='/usr/share/wazuh-dashboard/package.json'; p=json.load(open(f)); p['build']['number']=str(int(p['build']['number'])+int(time.time())//60%1000000); json.dump(p,open(f,'w'),indent=2)"
 USER wazuh-dashboard
