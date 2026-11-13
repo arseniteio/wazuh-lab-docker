@@ -17,3 +17,5 @@ for part in agent engine; do
          -o "$LAB_DIR/build/oscompliance/oscompliance-$part" "./cmd/oscompliance-$part" )
   ok "linux/$arch, version $version"
 done
+
+install -m 644 "$CORE_SRC/agent/oscompliance.cron" "$LAB_DIR/build/oscompliance/oscompliance.cron"

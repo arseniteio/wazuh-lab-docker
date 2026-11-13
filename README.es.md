@@ -10,7 +10,7 @@ Es para desarrollo. Sus credenciales son públicas y tiene un solo agente.
 
 - Docker con Compose v2 y 12 GB de memoria. Probado en OrbStack sobre Apple Silicon.
 - Go, para compilar el agente y el motor.
-- Los repositorios power-ens y oscompliance-ens, en las rutas indicadas en `lab.conf`.
+- Los repositorios power-ens y oscompliance-ens junto a este, o en las rutas indicadas en `lab.conf.local`.
 - La imagen de compilación del plugin. En el repositorio power-ens, ejecuta una vez `ci/build-zip.sh 2.19.5`.
 
 ## Uso
@@ -48,7 +48,7 @@ Motor: `bash scripts/build-core.sh` y después `docker restart power-ens-lab-eng
 Agente: `bash scripts/build-core.sh`. Lo ejecuta la siguiente pasada horaria, en el minuto 17. Para ejecutarlo ya:
 
 ```bash
-docker exec power-ens-lab-agent-01-1 /opt/oscompliance/oscompliance-agent
+docker exec power-ens-lab-agent-01-1 oscompliance-agent
 ```
 
 ## Configuración

@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
 set -eu
 
-OSC_AGENT=/opt/oscompliance/oscompliance-agent
+OSC_BUILD=/opt/oscompliance
+OSC_AGENT=/usr/local/bin/oscompliance-agent
 OSC_FACTS=/var/log/oscompliance/facts.ndjson
-if [ -x "$OSC_AGENT" ]; then
-  echo ">>> oscompliance-agent"
+if [ -x "$OSC_BUILD/oscompliance-agent" ]; then
+  echo ">>> oscompliance-agent, installed as in docs/en/install.md section 7"
+  ln -sf "$OSC_BUILD/oscompliance-agent" "$OSC_AGENT"
+  install -m 644 "$OSC_BUILD/oscompliance.cron" /etc/cron.d/oscompliance
   install -d -m 750 "$(dirname "$OSC_FACTS")"
+  install -d -m 700 /var/lib/oscompliance
   [ -e "$OSC_FACTS" ] || install -m 640 /dev/null "$OSC_FACTS"
-  printf '%s\n' \
-    '# oscompliance-agent: one collection pass per hour, the filesystem sweep daily.' \
-    "17 * * * * root $OSC_AGENT >/dev/null 2>&1" \
-    "23 3 * * * root $OSC_AGENT -collect sweep >/dev/null 2>&1" \
-    > /etc/cron.d/oscompliance
 fi
 
 PORTAL_LOG=/var/log/lab-portal/auth.json
