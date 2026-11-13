@@ -3,3 +3,8 @@ build/
 images/dashboard/power-ens-2.19.5.zip
 lab.conf.local
 .DS_Store
+.env
+.env.*
+*.key
+.idea/
+.vscode/
