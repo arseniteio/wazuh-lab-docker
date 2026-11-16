@@ -1,0 +1,22 @@
+nodes:
+  indexer:
+    - name: wazuh-idx-01
+      ip: "192.168.250.11"
+    - name: wazuh-idx-02
+      ip: "192.168.250.12"
+    - name: wazuh-idx-03
+      ip: "192.168.250.13"
+
+  server:
+    - name: wazuh-mgr-01
+      ip: "192.168.250.21"
+      node_type: master
+    - name: wazuh-mgr-02
+      ip: "192.168.250.22"
+      node_type: worker
+
+  dashboard:
+    - name: wazuh-dash-01
+      ip: "192.168.250.31"
+    - name: wazuh-dash-02
+      ip: "192.168.250.32"

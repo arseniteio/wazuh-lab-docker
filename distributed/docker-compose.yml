@@ -1,0 +1,86 @@
+name: power-ens-dist
+
+x-rocky: &rocky
+  build:
+    context: images/rocky9
+  privileged: true
+  restart: unless-stopped
+  stop_signal: SIGRTMIN+3
+  stop_grace_period: 60s
+  tmpfs:
+    - /run
+    - /run/lock
+  ulimits:
+    memlock: { soft: -1, hard: -1 }
+    nofile: { soft: 655360, hard: 655360 }
+  volumes:
+    - ./shared:/lab
+
+services:
+  wazuh-idx-01:
+    <<: *rocky
+    image: power-ens-dist/wazuh-idx-01:${LAB_TAG:-base}
+    hostname: wazuh-idx-01
+    networks: { lab: { ipv4_address: 192.168.250.11 } }
+
+  wazuh-idx-02:
+    <<: *rocky
+    image: power-ens-dist/wazuh-idx-02:${LAB_TAG:-base}
+    hostname: wazuh-idx-02
+    networks: { lab: { ipv4_address: 192.168.250.12 } }
+
+  wazuh-idx-03:
+    <<: *rocky
+    image: power-ens-dist/wazuh-idx-03:${LAB_TAG:-base}
+    hostname: wazuh-idx-03
+    networks: { lab: { ipv4_address: 192.168.250.13 } }
+
+  wazuh-mgr-01:
+    <<: *rocky
+    image: power-ens-dist/wazuh-mgr-01:${LAB_TAG:-base}
+    hostname: wazuh-mgr-01
+    networks: { lab: { ipv4_address: 192.168.250.21 } }
+    ports:
+      - "127.0.0.1:${API_PORT:-55010}:55000"
+
+  wazuh-mgr-02:
+    <<: *rocky
+    image: power-ens-dist/wazuh-mgr-02:${LAB_TAG:-base}
+    hostname: wazuh-mgr-02
+    networks: { lab: { ipv4_address: 192.168.250.22 } }
+
+  wazuh-dash-01:
+    <<: *rocky
+    image: power-ens-dist/wazuh-dash-01:${LAB_TAG:-base}
+    hostname: wazuh-dash-01
+    networks: { lab: { ipv4_address: 192.168.250.31 } }
+    ports:
+      - "127.0.0.1:${DASH01_PORT:-8453}:443"
+
+  wazuh-dash-02:
+    <<: *rocky
+    image: power-ens-dist/wazuh-dash-02:${LAB_TAG:-base}
+    hostname: wazuh-dash-02
+    networks: { lab: { ipv4_address: 192.168.250.32 } }
+    ports:
+      - "127.0.0.1:${DASH02_PORT:-8454}:443"
+
+  agent-01:
+    <<: *rocky
+    image: power-ens-dist/agent-01:${LAB_TAG:-base}
+    hostname: agent-01
+    networks: { lab: { ipv4_address: 192.168.250.41 } }
+
+  agent-02:
+    <<: *rocky
+    build:
+      context: images/ubuntu22
+    image: power-ens-dist/agent-02:${LAB_TAG:-base}
+    hostname: agent-02
+    networks: { lab: { ipv4_address: 192.168.250.42 } }
+
+networks:
+  lab:
+    ipam:
+      config:
+        - subnet: ${LAB_SUBNET:-192.168.250.0/24}
