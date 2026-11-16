@@ -75,9 +75,9 @@ manager_cluster_ok() { [ "$(on wazuh-mgr-01 /var/ossec/bin/cluster_control -l | 
 agents_active() { [ "$(on wazuh-mgr-01 /var/ossec/bin/agent_control -l | grep -cE 'Name: agent-0[12],.*Active')" -eq 2 ]; }
 
 dashboard_login() {
-  curl -sk -o /dev/null -w '%{http_code}' -X POST "https://localhost:$1/auth/login" \
-    -H 'osd-xsrf: true' -H 'Content-Type: application/json' \
-    -d "{\"username\":\"admin\",\"password\":\"$(admin_password)\"}" | grep -q '^200$'
+  printf '{"username":"admin","password":"%s"}' "$(admin_password)" |
+    curl -sk -o /dev/null -w '%{http_code}' -X POST "https://localhost:$1/auth/login" \
+      -H 'osd-xsrf: true' -H 'Content-Type: application/json' --data-binary @- | grep -q '^200$'
 }
 
 wait_for_wazuh() {
