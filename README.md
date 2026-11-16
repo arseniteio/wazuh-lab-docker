@@ -10,8 +10,8 @@ It is for development. Its credentials are public and it has one agent.
 
 - Docker with Compose v2, with 12 GB of memory. Tested on OrbStack on Apple Silicon.
 - Go, to build the agent and the engine.
-- The power-ens and oscompliance-ens repositories next to this one, or at the paths set in `lab.conf.local`.
-- The plugin builder image. In the power-ens repository, run `ci/build-zip.sh 2.19.5` once.
+- The power-ens-wazuh and oscompliance-ens-wazuh repositories next to this one, or at the paths set in `lab.conf.local`.
+- The plugin builder image. In the power-ens-wazuh repository, run `ci/build-zip.sh 2.19.5` once.
 
 ## Use
 
