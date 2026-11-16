@@ -1,0 +1,22 @@
+The files in this directory are not covered by the AGPL-3.0 license of the
+rest of the repository. They are derived from the single-node deployment of
+wazuh-docker 4.14.7 (https://github.com/wazuh/wazuh-docker) and keep their
+original licenses.
+
+Copyright (C) 2015, Wazuh Inc.
+Licensed under the GNU General Public License version 2. See LICENSE.GPL-2.0.
+
+  certs.yml
+  wazuh_cluster/wazuh_manager.conf
+  wazuh_dashboard/opensearch_dashboards.yml
+  wazuh_dashboard/wazuh.yml
+  wazuh_indexer/wazuh.indexer.yml
+
+Copyright OpenSearch Contributors.
+Licensed under the Apache License, Version 2.0. See LICENSE.Apache-2.0.
+wazuh-docker ships this file from the OpenSearch Security plugin.
+
+  wazuh_indexer/internal_users.yml
+
+The lab changes some values in these files, such as passwords, host names
+and paths.

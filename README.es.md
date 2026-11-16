@@ -84,3 +84,11 @@ En macOS, el generador de certificados deja `certs/` en solo lectura y omite `ro
 Un agente recreado sin su `client.keys` se rechaza por nombre duplicado. Por eso el `/var/ossec/etc` del agente es un volumen.
 
 logcollector se salta el contenido existente de un fichero recién descubierto, así que el agente crea sus ficheros de hechos vacíos antes de arrancar.
+
+## Licencia
+
+Copyright (c) 2026 Arsenite.
+
+wazuh-lab-docker se distribuye bajo la GNU Affero General Public License versión 3 (AGPL-3.0-only). Consulta [LICENSE](LICENSE). Los ficheros de configuración de Wazuh de `config/` proceden de wazuh-docker y mantienen sus licencias originales, GPL-2.0 y Apache-2.0. Consulta [config/NOTICE](config/NOTICE).
+
+Arsenite ofrece también wazuh-lab-docker con una licencia comercial, para organizaciones que no pueden cumplir las obligaciones de la AGPL, como mantener privados los cambios en un producto o en un servicio en red. Escribe a devqs@quersystem.com para conocer las condiciones.
