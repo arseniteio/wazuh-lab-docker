@@ -41,9 +41,6 @@
       "admin | /etc | rw",
       "ops | /var/log | r"
     ],
-    "P-02": [
-      "rsec | global"
-    ],
     "P-05": [
       "jperez"
     ],
@@ -93,7 +90,6 @@
       "test"
     ],
     "P-05": 1,
-    "P-06": 365,
     "P-07": [
       "jperez | lab-agent-01 | admin",
       "mgarcia | lab-agent-01 | ops"
@@ -144,10 +140,6 @@
     "P-01": [
       "tree"
     ],
-    "P-03": [
-      "root",
-      "jperez"
-    ],
     "P-05": 90,
     "P-06": "PR-15 Gestión de cambios del laboratorio",
     "P-07": [
@@ -174,11 +166,6 @@
       "Baja | 180",
       "Sin puntuación |"
     ],
-    "P-02": [
-      "root | laboratorio | administración",
-      "unattended-upgrades | laboratorio | parcheado automático",
-      "jperez | laboratorio | operación"
-    ],
     "P-03": [
       "ubuntu | Ubuntu Security Notices | RSS",
       "canonical | Ubuntu Security Notices | RSS",
@@ -198,13 +185,9 @@
       "Media | 4.0",
       "Baja | 0.1"
     ],
-    "P-10": 7,
-    "P-06": []
+    "P-10": 7
   },
   "op.exp.5": {
-    "P-01": [
-      "power_ens | Configuración, P-10 | RFC-"
-    ],
     "P-02": [
       "peticion",
       "fecha_registro",
@@ -270,9 +253,6 @@
       "Alta | RSI | 4 | teléfono",
       "Crítica | RSI | 1 | teléfono"
     ],
-    "P-03": [
-      "registro de incidentes de Power ENS | Configuración, P-13 | RSI"
-    ],
     "P-04": [
       "lab-agent-01 | Responsable de Información | Responsable del Servicio",
       "wazuh.manager | Responsable de Seguridad | Responsable de Sistemas"
@@ -328,9 +308,6 @@
     "P-05": [
       "/var/ossec/logs/alerts | firma .sum de Wazuh | solo el manager"
     ],
-    "P-06": [
-      "penal | 1825"
-    ],
     "P-07": [
       "media | 15 | revisión de reglas y localfiles",
       "alta | 7 | revisión de reglas y localfiles",
@@ -355,14 +332,6 @@
       "ntp.ubuntu.com | NTP"
     ],
     "P-06": 1,
-    "P-07": [
-      "autenticación | 365",
-      "administración | 365"
-    ],
-    "P-08": [
-      "root | lectura | todos",
-      "syslog | escritura | /var/log"
-    ],
     "P-09": [
       "índices de alertas | repositorio lab-backups | diaria | sí"
     ],
@@ -414,16 +383,12 @@
   "mp.info.6": {
     "P-01": 24,
     "P-02": 2,
-    "P-03": 1,
     "P-04": [
       "configuración | /var/backups/lab-etc-*.tgz | | "
     ],
     "P-05": 90,
     "P-06": [
       "2026-10-25 | lab-agent-01 | configuración | correcta | tar tzf y comparación de /etc/hostname"
-    ],
-    "P-07": [
-      "root"
     ],
     "P-09": "NAS del laboratorio",
     "P-10": "rsync",
@@ -528,10 +493,6 @@
     "P-04": [
       "CPD alternativo del laboratorio | Proveedor X | CT-2026-001 | 2027-09-01 | 48 h"
     ],
-    "P-05": [
-      "A. Martínez | coordinación de crisis | 2026-09-10 | 2027-09-10",
-      "J. Ruiz | coordinación de crisis | 2026-09-10 | 2027-09-10"
-    ],
     "P-06": [
       "Plan de Emergencia del edificio"
     ],
@@ -572,9 +533,6 @@
     "P-03": [
       "M365 | ENS ALTA | Microsoft 365 | 2027-06-30 | declaración de conformidad 2026"
     ],
-    "P-04": [
-      "M365 | Common Criteria | CCN-2026-001 | 2027-03-31"
-    ],
     "P-06": [
       "M365 | office365 | inquilino del laboratorio"
     ],
@@ -586,9 +544,6 @@
     ],
     "P-10": [
       "M365 | resumen ejecutivo 2026 | 2026-02-15 | plataforma"
-    ],
-    "P-11": [
-      "M365 | admin@lab.power-ens.local"
     ],
     "P-12": 12,
     "P-13": 24,
@@ -633,9 +588,6 @@
     "P-03": "PR-18 Respuesta a intrusión",
     "P-04": [
       "certificado cualificado | Reglamento eIDAS"
-    ],
-    "P-07": [
-      "Wazuh manager | Common Criteria EAL2 | CCN-LAB-1 | 2028-01-31"
     ],
     "P-ATT": [
       "mp.com.3.3 | Política de identificación electrónica | https://intranet.lab.power-ens.local/docs/eidas.pdf | 2026-09-01 | Responsable de Seguridad",
@@ -736,9 +688,6 @@
     ],
     "P-04": "TLS 1.2 o superior entrante y saliente",
     "P-06": "NT-02 Uso del correo electrónico",
-    "P-07": [
-      "2026-09-15 | campaña de phishing simulado | toda la plantilla | 87 %"
-    ],
     "P-08": 365,
     "P-10": 4,
     "P-ATT": [
@@ -793,13 +742,6 @@
       "192.168.167.0/24"
     ],
     "P-05": "perfiles separados de uso personal y corporativo",
-    "P-06": [
-      "2026-09-20 | sesión sobre descargas | toda la plantilla | 80 %"
-    ],
-    "P-07": [
-      "2026-05-20 | A. Martínez | respuesta a incidentes"
-    ],
-    "P-08": 365,
     "P-09": 365,
     "P-10": 730,
     "P-11": "inspección TLS salvo banca y sanidad; 30 días",
@@ -838,9 +780,6 @@
       "sin vulnerabilidades críticas",
       "TLS 1.2 o superior"
     ],
-    "P-03": [
-      "lab-agent-01 | wazuh.manager | red de Docker separada"
-    ],
     "P-04": 7,
     "P-05": [
       "* | 22 | ssh",
@@ -848,6 +787,46 @@
     ],
     "P-06": [
       "2026-10-01 | portal del laboratorio | | aceptada | Responsable de Seguridad"
+    ]
+  },
+  "organization": {
+    "personal_autorizado": [
+      "root | configuracion, copias",
+      "jperez | configuracion",
+      "root | mantenimiento | laboratorio | administración",
+      "unattended-upgrades | mantenimiento | laboratorio | parcheado automático",
+      "jperez | mantenimiento | laboratorio | operación",
+      "root | registros | todos | lectura",
+      "syslog | registros | /var/log | escritura",
+      "rsec | autorizaciones | global",
+      "admin@lab.power-ens.local | nube | M365"
+    ],
+    "entorno_preproduccion": [
+      "lab-agent-01 | wazuh.manager |  | red de Docker separada"
+    ],
+    "herramientas_gestion": [
+      "cambios | power_ens | Configuración, P-10 | RFC-",
+      "incidentes | registro de incidentes de Power ENS | Configuración, P-13 | RSI"
+    ],
+    "retencion": [
+      "registros | autenticación | 365",
+      "registros | administración | 365",
+      "evidencias | penal | 1825",
+      "cuentas, navegacion |  | 365",
+      "copias |  | 1"
+    ],
+    "productos_certificados": [
+      "M365 | Common Criteria | CCN-2026-001 | 2027-03-31",
+      "Wazuh manager | Common Criteria EAL2 | CCN-LAB-1 | 2028-01-31"
+    ],
+    "formacion_personal": [
+      "A. Martínez | coordinación de crisis | 2026-09-10 | 2027-09-10",
+      "J. Ruiz | coordinación de crisis | 2026-09-10 | 2027-09-10",
+      "A. Martínez | respuesta a incidentes | 2026-05-20 | 2027-05-20"
+    ],
+    "concienciacion": [
+      "correo | 2026-09-15 | campaña de phishing simulado | toda la plantilla | 87 %",
+      "navegacion | 2026-09-20 | sesión sobre descargas | toda la plantilla | 80 %"
     ]
   }
 }
