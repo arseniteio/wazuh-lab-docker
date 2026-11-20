@@ -47,4 +47,4 @@ Types: feat, fix, refactor, perf, test, docs, build, ci, chore, style and revert
 
 ## License
 
-The project is licensed under AGPL-3.0-only, and Arsenite also offers it under a commercial license. To keep both possible, Arsenite needs the rights to every contribution. Before your first pull request is merged, sign the Arsenite contributor license agreement. Ask for it at devqs@quersystem.com.
+The project is licensed under AGPL-3.0-only, and Quer System Informática also offers it under a commercial license. To keep both possible, Quer System Informática needs the rights to every contribution. Before your first pull request is merged, sign the Quer System Informática contributor license agreement. Ask for it at devqs@quersystem.com.
